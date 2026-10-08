@@ -8,28 +8,33 @@
    tipografía grande y de alto contraste. Moderno, deportivo, vendedor.
 =================================================================== */
 @theme {
-  /* --- superficies oscuras (midnight con matiz azul) --- */
-  --color-ink: #070a12;
-  --color-ink-2: #0d1320;
-  --color-ink-3: #141c2c;
-  --color-ink-4: #1d2739;
-  --color-line: #233043;
-  --color-line-strong: #33445c;
-  --color-muted: #8b97ab;
-  --color-muted-2: #5e6b81;
+  /* --- superficies oscuras (negro profundo) --- */
+  --color-ink: #000000;
+  --color-ink-2: #0c0c0c;
+  --color-ink-3: #141414;
+  --color-ink-4: #1c1c1c;
+  --color-line: #262626;
+  --color-line-strong: #3a3a3a;
+  --color-muted: #9dab9d;
+  --color-muted-2: #6b7568;
 
-  /* --- superficies claras (secciones "paper") --- */
-  --color-paper: #f5f7fa;
-  --color-paper-2: #e9edf3;
-  --color-line-2: #d5dce6;
-  --color-ink-soft: #39424f;
+  /* --- superficies claras (tarjetas "paper" sobre negro) --- */
+  --color-paper: #e6e9e4;
+  --color-paper-2: #dce0d8;
+  --color-line-2: #c9cdc3;
+  --color-ink-soft: #2b2f28;
 
   /* --- acentos --- */
-  --color-volt: #2ee6f0;
-  --color-volt-deep: #10c2d6;
-  --color-volt-dim: #2b8998;
-  --color-flame: #ff6a3d;
-  --color-flame-deep: #e84a1f;
+  --color-volt: #c6d24b;
+  --color-volt-deep: #aebb3d;
+  --color-volt-dim: #7c8a54;
+  --color-flame: #8fa84a;
+  --color-flame-deep: #6b8235;
+  --color-olive: #254225;
+  --color-olive-2: #1b311b;
+  --color-ember: #ff5500;
+  --color-ember-deep: #d84200;
+  --color-ember-light: #ff8a3d;
 
   /* --- estados --- */
   --color-ok: #34d399;
@@ -37,8 +42,9 @@
   --color-danger: #f87171;
 
   /* --- tipografía --- */
-  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Big Shoulders Display", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   /* --- radios --- */
   --radius-lg: 0.85rem;
@@ -49,7 +55,7 @@
   /* --- sombras premium --- */
   --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
   --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.35), 0 24px 60px -24px rgba(0, 0, 0, 0.75);
-  --shadow-glow: 0 10px 40px -12px rgba(46, 230, 240, 0.5);
+  --shadow-glow: 0 10px 40px -12px rgba(198, 210, 75, 0.5);
 
   /* --- animaciones --- */
   --animate-marquee: marquee 30s linear infinite;
@@ -70,13 +76,13 @@
   body {
     margin: 0;
     background-color: var(--color-ink);
-    color: #eef0f3;
+    color: #e6e9e4;
     font-family: var(--font-sans);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-weight: 800;
+    font-weight: 900;
     letter-spacing: -0.03em;
     line-height: 0.98;
   }
@@ -98,7 +104,7 @@
 
 /* ---- Etiqueta "kicker": mono-ish, uppercase, con guion ---- */
 .kicker {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -114,9 +120,9 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- Texto con degradé eléctrico (cian → azul) ---- */
+/* ---- Texto con degradé lima ---- */
 .text-gradient {
-  background: linear-gradient(100deg, #a9f6ff 0%, var(--color-volt) 42%, #5b8cff 100%);
+  background: linear-gradient(100deg, #eef7b8 0%, var(--color-volt) 42%, #8fa84a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -150,7 +156,47 @@
 
 /* ---- Glow radial reutilizable ---- */
 .glow {
-  background: radial-gradient(circle at center, rgba(46, 230, 240, 0.18), transparent 65%);
+  background: radial-gradient(circle at center, rgba(198, 210, 75, 0.18), transparent 65%);
+}
+
+/* ---- Fondo global de página: viñeta + resplandores olive/volt repartidos ---- */
+.site-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.site-bg--glow {
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, rgba(0, 0, 0, 0.55)),
+    radial-gradient(1200px 440px at 50% 0%, rgba(53, 91, 52, 0.34), transparent 72%),
+    radial-gradient(640px 540px at 76% 7%, rgba(198, 210, 75, 0.12), transparent 70%),
+    radial-gradient(820px 620px at 10% 16%, rgba(53, 91, 52, 0.28), transparent 70%),
+    radial-gradient(900px 640px at 90% 26%, rgba(37, 66, 37, 0.42), transparent 70%),
+    radial-gradient(1000px 700px at 4% 40%, rgba(53, 91, 52, 0.28), transparent 70%),
+    radial-gradient(900px 700px at 50% 52%, rgba(198, 210, 75, 0.075), transparent 70%),
+    radial-gradient(900px 700px at 100% 62%, rgba(37, 66, 37, 0.4), transparent 70%),
+    radial-gradient(900px 700px at 0% 75%, rgba(53, 91, 52, 0.3), transparent 70%),
+    radial-gradient(900px 700px at 100% 88%, rgba(37, 66, 37, 0.38), transparent 70%),
+    radial-gradient(1300px 520px at 50% 100%, rgba(198, 210, 75, 0.07), transparent 70%);
+}
+.site-bg--grid {
+  background-image:
+    linear-gradient(rgba(230, 233, 228, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230, 233, 228, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* ---- Grano sutil sobre toda la página ---- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
 }
 
 /* ---- Marquee horizontal de disciplinas ---- */
@@ -176,8 +222,8 @@
   50% { transform: translateY(-10px); }
 }
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(46, 230, 240, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(46, 230, 240, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(198, 210, 75, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(198, 210, 75, 0); }
 }
 
 /* ---- Reveal on scroll (IntersectionObserver toggle) ---- */

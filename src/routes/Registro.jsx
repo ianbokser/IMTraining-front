@@ -86,7 +86,7 @@ export default function Registro() {
         texto="Creá tu cuenta en segundos y armá tu rutina personalizada."
       >
         <p className="text-sm text-muted">
-          Sumate a las <span className="font-semibold text-white">+500 personas</span> que ya entrenan con IMTraining.
+          Sumate a las <span className="font-semibold text-white">+500 personas</span> que ya entrenan con IMTRAINING.
         </p>
       </AuthAside>
     </div>

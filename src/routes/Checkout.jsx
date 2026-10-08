@@ -271,7 +271,7 @@ export default function Checkout() {
                   <ShieldCheck size={15} className="shrink-0 text-volt" /> Pago seguro y encriptado
                 </li>
                 <li className="flex items-center gap-2">
-                  <Clock size={15} className="shrink-0 text-volt" /> Rutina lista en 48h
+                  <Clock size={15} className="shrink-0 text-volt" /> Rutina lista en 24hs
                 </li>
                 <li className="flex items-center gap-2">
                   <FileDown size={15} className="shrink-0 text-volt" /> Descarga inmediata al confirmar

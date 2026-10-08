@@ -39,9 +39,11 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm">
               {[
                 { to: '/', l: 'Inicio' },
-                { to: '/ejemplo', l: 'Ejemplo de rutina' },
+                { to: '/#preguntas', l: 'Preguntas frecuentes' },
                 { to: '/pedido', l: 'Pedir rutina' },
+                { to: '/#precios', l: 'Precios' },
                 { to: '/login', l: 'Ingresar' },
+                { to: '/#nosotros', l: 'Nosotros' },
               ].map((i) => (
                 <li key={i.to}>
                   <Link to={i.to} className="text-white/60 transition-colors hover:text-volt">
@@ -74,7 +76,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-2 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} IMTraining. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} IMTRAINING. Todos los derechos reservados.</p>
           <p>Hecho para que entrenes mejor.</p>
         </div>
       </div>

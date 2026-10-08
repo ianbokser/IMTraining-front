@@ -3,7 +3,7 @@
 export const testimonios = [
   {
     nombre: 'Martín G.',
-    texto: 'Bajé 6kg en 2 meses siguiendo la rutina. Los videos ayudan un montón.',
+    texto: 'La mejor decisión que tomé para entrenar en serio. Todo claro y a mi medida.',
     resultado: 'Hace 2 semanas',
     color: '#4285F4',
   },
@@ -39,31 +39,6 @@ export const testimonios = [
   },
 ]
 
-// Casos de resultado con métrica concreta (sección "resultados reales").
-export const resultados = [
-  {
-    nombre: 'Martín, 34',
-    objetivo: 'Perder grasa',
-    metrica: '-8 kg',
-    detalle: 'en 12 semanas',
-    texto: 'Sin dietas imposibles. Entrené 4 días y comí mejor. Los números hablan.',
-  },
-  {
-    nombre: 'Caro, 28',
-    objetivo: 'Volver post-lesión',
-    metrica: '0 dolor',
-    detalle: 'de rodilla',
-    texto: 'Adaptaron cada ejercicio a mi rehabilitación. Hoy entreno tranquila.',
-  },
-  {
-    nombre: 'Lucas, 41',
-    objetivo: 'Ganar fuerza',
-    metrica: '+40 kg',
-    detalle: 'en sentadilla',
-    texto: 'Progresión clara semana a semana. Nunca había levantado tanto.',
-  },
-]
-
 // Preguntas frecuentes (reducen fricción antes de comprar).
 export const faqs = [
   {
@@ -72,7 +47,7 @@ export const faqs = [
   },
   {
     q: '¿En cuánto tiempo la recibo?',
-    a: 'Tu rutina llega en formato PDF dentro de las 48 horas de confirmado el pago, lista para descargar y llevar al gimnasio.',
+    a: 'Tu rutina llega en formato PDF dentro de las 24 horas de confirmado el pago, lista para descargar y llevar al gimnasio.',
   },
   {
     q: '¿Sirve si nunca entrené?',

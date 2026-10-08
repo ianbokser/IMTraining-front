@@ -6,7 +6,7 @@ const base =
 const variants = {
   // acento volt sobre oscuro — CTA principal
   primary:
-    'bg-volt text-ink hover:bg-volt-deep shadow-[0_8px_24px_-10px_rgba(46,230,240,0.6)] hover:shadow-[0_12px_36px_-8px_rgba(46,230,240,0.75)] hover:-translate-y-0.5',
+    'bg-volt text-ink hover:bg-volt-deep shadow-[0_8px_24px_-10px_rgba(198,210,75,0.6)] hover:shadow-[0_12px_36px_-8px_rgba(198,210,75,0.75)] hover:-translate-y-0.5',
   // sólido claro (para secciones oscuras, alternativa neutra)
   light: 'bg-white text-ink hover:bg-white/90 hover:-translate-y-0.5',
   // sólido oscuro (para secciones claras / sobre volt)

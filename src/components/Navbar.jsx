@@ -6,9 +6,10 @@ import { useAuth } from '../features/auth/AuthContext'
 
 const links = [
   { to: '/', label: 'Inicio' },
+  { to: '/#como-funciona', label: 'Cómo funciona' },
+  { to: '/#precios', label: 'Precios' },
   { to: '/#nosotros', label: 'Nosotros' },
-  { to: '/ejemplo', label: 'Ejemplo' },
-  { to: '/pedido', label: 'Pedir rutina' },
+  { to: '/#preguntas', label: 'Preguntas' },
 ]
 
 export function Logo({ onClick }) {
@@ -16,12 +17,12 @@ export function Logo({ onClick }) {
     <Link to="/" onClick={onClick} className="group flex items-center gap-2.5">
       <span
         role="img"
-        aria-label="IMTraining"
+        aria-label="IMTRAINING"
         className="h-9 w-[3.25rem] shrink-0 rounded-xl bg-ink-2 bg-no-repeat ring-1 ring-line transition-transform group-hover:scale-105"
         style={{ backgroundImage: "url('/image.jpg')", backgroundSize: '209%', backgroundPosition: '49.5% 41%' }}
       />
       <span className="font-display text-lg font-extrabold tracking-tight text-white">
-        IM<span className="text-volt">Training</span>
+        IM<span className="text-volt">TRAINING</span>
       </span>
     </Link>
   )
@@ -99,7 +100,7 @@ export default function Navbar() {
                 <LogIn size={14} /> Ingresar
               </Link>
               <Button as="link" to="/pedido" size="sm" className="hidden sm:inline-flex">
-                Empezar{' '}
+                Pedir mi rutina{' '}
                 <ArrowUpRight
                   size={16}
                   className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -170,7 +171,7 @@ export default function Navbar() {
                     <LogIn size={16} /> Ingresar
                   </Link>
                   <Button as="link" to="/pedido" className="w-full">
-                    Empezar ahora <ArrowUpRight size={16} />
+                    Pedir mi rutina <ArrowUpRight size={16} />
                   </Button>
                 </>
               )}

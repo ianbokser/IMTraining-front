@@ -1,59 +1,108 @@
 import {
   Dumbbell,
   ShieldCheck,
-  FileText,
-  PlayCircle,
+  Play,
   ArrowRight,
   ArrowUpRight,
   Star,
   Check,
   Minus,
   Plus,
-  Zap,
   Clock,
-  BadgeCheck,
   UserRound,
+  MessageCircle,
+  Mail,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Button from '../components/Button'
-import Badge from '../components/Badge'
 import SectionTitle from '../components/SectionTitle'
 import Reveal from '../components/Reveal'
-import { testimonios, resultados, faqs } from '../lib/constants'
+import GoogleG from '../components/GoogleG'
+import { testimonios, faqs } from '../lib/constants'
 import { api } from '../lib/api'
 
-const IMG_HERO =
-  'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1100&q=80'
-const IMG_BENEFITS =
-  'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1100&q=80'
-
-const beneficios = [
-  { icon: Dumbbell, titulo: 'Personalizada', texto: 'Adaptada a tu edad, peso, altura y objetivos reales. Nada genérico.' },
-  { icon: ShieldCheck, titulo: 'Segura', texto: 'Contemplamos lesiones y limitaciones motrices para que entrenes tranquilo.' },
-  { icon: FileText, titulo: 'Lista en PDF', texto: 'La recibís organizada y prolija, lista para llevar al gym en tu celular.' },
-  { icon: PlayCircle, titulo: 'Con videos', texto: 'Cada ejercicio explicado en video. Técnica correcta desde el día uno.' },
-]
 
 const pasos = [
-  { n: '01', titulo: 'Contanos de vos', texto: 'Edad, peso, altura, lesiones y cuánto tiempo tenés para entrenar.' },
-  { n: '02', titulo: 'Elegí tu plan', texto: 'Días por semana, enfoque e intensidad según tu objetivo real.' },
-  { n: '03', titulo: 'Recibí tu rutina', texto: 'Un PDF profesional, hecho a tu medida, listo para descargar.' },
+  { n: '01', titulo: 'Contanos', texto: 'Tus objetivos, tu cuerpo, tu tiempo y si tenés alguna lesión.' },
+  { n: '02', titulo: 'Te la armamos', texto: 'Una rutina profesional pensada para vos. Sin plantillas genéricas.' },
+  { n: '03', titulo: 'Entrenás', texto: 'La recibís en 24 hs, en PDF, con videos y explicaciones de cada ejercicio.' },
+]
+
+const comoTrabajo = [
+  { n: '01', titulo: 'Analizo', texto: 'Tus datos, tus objetivos y tus límites, lesiones incluidas.' },
+  { n: '02', titulo: 'Diseño', texto: 'Un plan 100% personalizado, con la técnica correcta y cada ejercicio explicado en video.' },
+  { n: '03', titulo: 'Acompaño', texto: 'Seguimiento real de tu progreso: revisión cada 2 semanas y soporte por chat en los planes con seguimiento.' },
 ]
 
 const disciplinas = ['Fuerza', 'Hipertrofia', 'Pérdida de grasa', 'Resistencia', 'Movilidad', 'Powerlifting']
 
 const fmt = (n) => new Intl.NumberFormat('es-AR').format(n)
 
-// Logo "G" multicolor de Google, para que las reseñas se lean como de Google.
-function GoogleG({ size = 20 }) {
+// Metadata editorial de cada card de precios (no viene de la API): kicker tipo
+// "código de barras", leyenda bajo el precio y cantidad de barras del ícono.
+const PLAN_META = {
+  'plan-basico': { kicker: '01 — Rutina', caption: 'Pago único', bars: 2 },
+  'plan-pro': { kicker: '02 — Seguimiento', caption: 'Por mes', bars: 4 },
+  'plan-elite': { kicker: '03 — Acompañamiento', caption: 'Por 3 meses', bars: 6 },
+}
+
+// Ícono decorativo tipo "código de barras" usado en el header de cada card.
+function Barcode({ bars = 2, color = '#000000' }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden="true">
-      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+    <svg width="104" height="36" viewBox="0 0 152 52" fill={color} aria-hidden="true">
+      <line x1="4" y1="26" x2="148" y2="26" stroke={color} strokeWidth="4" strokeLinecap="round" />
+      <rect x="42" y="1" width="10" height="50" rx="2" />
+      <rect x="100" y="1" width="10" height="50" rx="2" />
+      {bars >= 4 && (
+        <>
+          <rect x="32" y="9" width="8" height="34" rx="2" />
+          <rect x="112" y="9" width="8" height="34" rx="2" />
+        </>
+      )}
+      {bars >= 6 && (
+        <>
+          <rect x="23" y="16" width="7" height="20" rx="2" />
+          <rect x="122" y="16" width="7" height="20" rx="2" />
+        </>
+      )}
     </svg>
+  )
+}
+
+// Check de ítem de beneficio.
+function PlanCheck({ color = '#000000' }) {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  )
+}
+
+// Marcador circular "+" para el primer ítem destacado ("Todo lo del plan...").
+function PlanPlusMarker({ bg = '#000000', stroke = '#ffffff' }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full"
+      style={{ background: bg }}
+    >
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="3.2" strokeLinecap="round">
+        <path d="M12 5v14" />
+        <path d="M5 12h14" />
+      </svg>
+    </span>
   )
 }
 
@@ -63,6 +112,9 @@ function ReviewsCarousel() {
   const cardsRef = useRef([])
   const offsetRef = useRef(0)
   const pausedRef = useRef(false)
+  const centerIndexRef = useRef(0)
+  const [centerIndex, setCenterIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -75,6 +127,8 @@ function ReviewsCarousel() {
 
     const draw = () => {
       const cards = cardsRef.current
+      let minDist = Infinity
+      let minIdx = centerIndexRef.current
       for (let i = 0; i < cards.length; i++) {
         const el = cards[i]
         if (!el) continue
@@ -82,6 +136,10 @@ function ReviewsCarousel() {
         x = ((x % total) + total) % total
         if (x > total / 2) x -= total
         const dist = Math.abs(x)
+        if (dist < minDist) {
+          minDist = dist
+          minIdx = i
+        }
         const norm = x / spacing
         const rotY = Math.max(-65, Math.min(65, -norm * 42))
         const tz = -Math.min(dist, spacing * 1.6) * 0.9
@@ -91,12 +149,24 @@ function ReviewsCarousel() {
         el.style.opacity = String(opacity)
         el.style.zIndex = String(1000 - Math.round(dist))
       }
+      if (minIdx !== centerIndexRef.current) {
+        centerIndexRef.current = minIdx
+        setCenterIndex(minIdx)
+      }
     }
 
+    // Al pausar, la tarjeta más cercana al centro queda fija ahí (sin saltos).
     const tick = (now) => {
       const dt = (now - last) / 1000
       last = now
-      if (!pausedRef.current) offsetRef.current = (offsetRef.current + speed * dt) % total
+      if (pausedRef.current) {
+        const nearest = Math.round(offsetRef.current / spacing) * spacing
+        const diff = nearest - offsetRef.current
+        offsetRef.current += Math.abs(diff) > 0.4 ? diff * Math.min(1, dt * 10) : diff
+        offsetRef.current = ((offsetRef.current % total) + total) % total
+      } else {
+        offsetRef.current = (offsetRef.current + speed * dt) % total
+      }
       draw()
       raf = requestAnimationFrame(tick)
     }
@@ -109,101 +179,159 @@ function ReviewsCarousel() {
     <div className="reviews mt-12">
       <div
         className="reviews__stage mx-auto h-[300px] w-full max-w-5xl"
-        onMouseEnter={() => (pausedRef.current = true)}
-        onMouseLeave={() => (pausedRef.current = false)}
+        onMouseEnter={() => {
+          pausedRef.current = true
+          setPaused(true)
+        }}
+        onMouseLeave={() => {
+          pausedRef.current = false
+          setPaused(false)
+        }}
       >
-        {testimonios.map((t, i) => (
-          <figure
-            key={t.nombre}
-            ref={(el) => (cardsRef.current[i] = el)}
-            className="reviews__card w-[clamp(240px,72vw,300px)] rounded-2xl border border-line-2 bg-paper p-5 shadow-lg"
-          >
-            <figcaption className="flex items-center gap-2.5">
-              <span
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full font-display text-base font-bold text-white"
-                style={{ backgroundColor: t.color }}
-              >
-                {t.nombre.charAt(0)}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-ink">{t.nombre}</p>
-                <p className="text-[0.7rem] text-ink-soft">{t.resultado}</p>
+        {testimonios.map((t, i) => {
+          const focused = paused && centerIndex === i
+          return (
+            <figure
+              key={t.nombre}
+              ref={(el) => (cardsRef.current[i] = el)}
+              className={`reviews__card rounded-2xl border border-line-2 bg-paper p-5 shadow-lg transition-[width] duration-300 ${
+                focused ? 'w-[clamp(260px,76vw,340px)]' : 'w-[clamp(240px,72vw,300px)]'
+              }`}
+            >
+              <figcaption className="flex items-center gap-2.5">
+                <span
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full font-display text-base font-bold text-white"
+                  style={{ backgroundColor: t.color }}
+                >
+                  {t.nombre.charAt(0)}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-ink">{t.nombre}</p>
+                  <p className="text-[0.7rem] text-ink-soft">{t.resultado}</p>
+                </div>
+                <GoogleG size={18} />
+              </figcaption>
+              <div className="mt-2.5 flex gap-0.5" style={{ color: '#FBBC04' }}>
+                {Array.from({ length: 5 }).map((_, s) => (
+                  <Star key={s} size={13} fill="currentColor" strokeWidth={0} />
+                ))}
               </div>
-              <GoogleG size={18} />
-            </figcaption>
-            <div className="mt-2.5 flex gap-0.5" style={{ color: '#FBBC04' }}>
-              {Array.from({ length: 5 }).map((_, s) => (
-                <Star key={s} size={13} fill="currentColor" strokeWidth={0} />
-              ))}
-            </div>
-            <blockquote className="mt-2 text-[0.85rem] leading-relaxed text-ink">{t.texto}</blockquote>
-          </figure>
-        ))}
+              <blockquote
+                className={`mt-2 leading-relaxed text-ink transition-all duration-300 ${
+                  focused ? 'text-[1rem]' : 'text-[0.85rem]'
+                }`}
+              >
+                {t.texto}
+              </blockquote>
+            </figure>
+          )
+        })}
       </div>
     </div>
   )
 }
 
-function FaqItem({ q, a, open, onToggle }) {
+function FaqItem({ index, q, a, open, onToggle }) {
   return (
-    <div className="border-b border-line">
+    <div
+      className={`overflow-hidden rounded-xl border transition-colors ${
+        open ? 'border-volt/40 bg-olive' : 'border-line bg-transparent'
+      }`}
+      style={
+        open
+          ? {
+              backgroundImage:
+                'linear-gradient(158deg, rgba(255,255,255,0.085) 0%, rgba(255,255,255,0.025) 34%, rgba(0,0,0,0.22) 100%)',
+              boxShadow:
+                'inset 0 1px 0 rgba(255,255,255,0.12), inset 0 0 0 1px rgba(255,255,255,0.025), 0 1px 2px rgba(0,0,0,0.55), 0 30px 60px -28px rgba(0,0,0,0.95)',
+            }
+          : undefined
+      }
+    >
       <button
         onClick={onToggle}
-        className="flex w-full items-center justify-between gap-4 py-5 text-left"
+        className="flex w-full items-center gap-3 px-3.5 py-3.5 text-left"
         aria-expanded={open}
       >
-        <span className="font-display text-lg font-bold text-white">{q}</span>
         <span
-          className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-colors ${
-            open ? 'border-volt bg-volt text-ink' : 'border-line text-white'
+          className={`kicker w-7 shrink-0 text-[11px] transition-colors ${
+            open ? 'text-volt' : 'text-muted-2'
           }`}
         >
-          {open ? <Minus size={16} /> : <Plus size={16} />}
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className="flex-1 font-display text-base font-bold text-white sm:text-lg">{q}</span>
+        <span
+          className={`grid h-7 w-7 shrink-0 place-items-center rounded-full transition-colors ${
+            open ? 'bg-volt text-ink' : 'border border-line text-white'
+          }`}
+        >
+          {open ? <Minus size={14} /> : <Plus size={14} />}
         </span>
       </button>
       <div
         className={`grid transition-all duration-300 ease-out ${
-          open ? 'grid-rows-[1fr] pb-5 opacity-100' : 'grid-rows-[0fr] opacity-0'
+          open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         }`}
       >
-        <p className="overflow-hidden pr-12 text-[0.95rem] leading-relaxed text-muted">{a}</p>
+        <div className="overflow-hidden pb-4 pl-[52px] pr-3.5 text-sm leading-relaxed text-muted">
+          {a}
+        </div>
       </div>
     </div>
   )
 }
 
-// Foto de un miembro del equipo. Si la imagen no existe todavía, muestra un
-// placeholder claro indicando dónde dejar el archivo.
-function TeamPhoto({ src, alt, caption }) {
+// Card del fundador: foto real si existe en /public, si no, un placeholder
+// con la misma composición que la referencia (marco, esquinas, ícono).
+function TeamCard({ src, alt }) {
   const [ok, setOk] = useState(true)
   return (
-    <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-3xl border border-line bg-ink-2">
-      {ok ? (
-        <img
-          src={src}
-          alt={alt}
-          onError={() => setOk(false)}
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        <div className="grid h-full place-items-center px-6 text-center">
-          <div>
-            <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-volt/10 text-volt">
-              <UserRound size={30} />
+    <div className="relative">
+      <div className="pointer-events-none absolute -bottom-10 -left-16 hidden h-72 w-72 lg:block">
+        <div className="absolute inset-0 rounded-full border border-volt/40" />
+        <div className="absolute inset-8 rounded-full border border-dashed border-white/10" />
+        <div className="absolute inset-24 rounded-full border border-white/10" />
+      </div>
+
+      <article className="relative overflow-hidden rounded-[1.75rem] bg-paper p-4 text-ink shadow-2xl">
+        <div className="relative h-[420px] overflow-hidden rounded-2xl bg-ink">
+          {ok ? (
+            <img
+              src={src}
+              alt={alt}
+              onError={() => setOk(false)}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="relative grid h-full place-items-center">
+              <div className="grid-bg absolute inset-0 opacity-40" />
+              <span className="absolute left-4 top-4 h-6 w-6 border-l-2 border-t-2 border-volt" />
+              <span className="absolute right-4 top-4 h-6 w-6 border-r-2 border-t-2 border-volt" />
+              <span className="absolute bottom-4 left-4 h-6 w-6 border-b-2 border-l-2 border-volt" />
+              <span className="absolute bottom-4 right-4 h-6 w-6 border-b-2 border-r-2 border-volt" />
+              <div className="relative flex flex-col items-center gap-4">
+                <span className="grid h-24 w-24 place-items-center rounded-full bg-volt/15 text-volt">
+                  <UserRound size={40} />
+                </span>
+                <span className="kicker text-muted">Foto de {alt}</span>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col gap-3 px-2 pb-2 pt-5">
+          <span className="kicker text-ink-soft/60">Equipo IMTRAINING</span>
+          <p className="font-display text-5xl font-black uppercase leading-[0.88] text-ink">{alt}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex h-8 items-center rounded-full bg-ink px-3.5 text-[13px] font-bold text-volt">
+              Fundador · CEO
             </span>
-            <p className="mt-4 font-display font-bold text-white">Foto de {alt}</p>
-            <p className="mt-1 text-xs text-muted">
-              Dejá la imagen en <span className="text-white/70">public{src}</span>
-            </p>
+            <span className="flex h-8 items-center rounded-full border border-ink px-3.5 text-[13px] font-semibold text-ink">
+              Profesor
+            </span>
           </div>
         </div>
-      )}
-      {ok && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-4">
-          <p className="font-display font-bold text-white">{alt}</p>
-          {caption && <p className="text-xs text-volt">{caption}</p>}
-        </div>
-      )}
+      </article>
     </div>
   )
 }
@@ -233,36 +361,32 @@ export default function Home() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-12 lg:py-24">
           {/* Texto */}
           <div className="rise lg:col-span-7">
-            <div className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-3.5 py-1.5">
-              <span className="flex gap-0.5 text-volt">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={13} fill="currentColor" strokeWidth={0} />
-                ))}
-              </span>
-              <span className="text-xs font-medium text-white/80">+500 rutinas entregadas · 4,9/5</span>
+            <div className="inline-flex items-center gap-2.5">
+              <span className="h-2 w-2 rounded-full bg-volt shadow-[0_0_12px_rgba(198,210,75,0.8)]" />
+              <span className="kicker text-white/80">Rutinas personalizadas · PDF con videos</span>
             </div>
-            <h1 className="mt-6 text-5xl font-extrabold uppercase leading-[0.95] text-white sm:text-6xl lg:text-7xl">
+            <h1 className="mt-6 font-display text-[3.75rem] font-black uppercase leading-[0.86] text-white sm:text-[4.75rem] lg:text-[6.75rem] xl:text-[8.5rem]">
               Tu rutina de gym,
               <br />
               <span className="text-gradient">hecha para vos.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Contanos tus objetivos y tu cuerpo. Te armamos una rutina profesional —con videos y
-              explicaciones— lista para descargar en PDF. Sin plantillas genéricas.
+              Contanos tus objetivos y tu cuerpo. Te armamos una rutina profesional, con videos y
+              explicaciones, lista para descargar en PDF. Sin plantillas genéricas.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-5">
               <Button as="link" to="/pedido" size="lg">
                 Pedir mi rutina <ArrowRight size={18} />
               </Button>
-              <Button as="link" to="/ejemplo" size="lg" variant="outline">
-                <PlayCircle size={18} /> Ver un ejemplo
-              </Button>
             </div>
 
-            <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
-              {['Entrega en 48h', 'Adaptada a lesiones', 'Pago seguro'].map((t) => (
-                <li key={t} className="flex items-center gap-2">
-                  <Check size={16} className="text-volt" /> {t}
+            <ul className="mt-8 flex flex-wrap gap-2.5">
+              {['Entrega en 48 h', 'Adaptada a lesiones', 'Pago seguro'].map((t) => (
+                <li
+                  key={t}
+                  className="flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/90"
+                >
+                  <Check size={15} className="text-volt" /> {t}
                 </li>
               ))}
             </ul>
@@ -271,7 +395,7 @@ export default function Home() {
               {[
                 { k: '+500', v: 'rutinas entregadas' },
                 { k: '4,9★', v: 'valoración media' },
-                { k: '48h', v: 'de entrega' },
+                { k: '24hs', v: 'de entrega' },
               ].map((s) => (
                 <div key={s.v}>
                   <dt className="numeral text-3xl text-white">{s.k}</dt>
@@ -281,148 +405,218 @@ export default function Home() {
             </dl>
           </div>
 
-          {/* Imagen + card flotante */}
+          {/* Ejemplo de rutina, sin foto de stock */}
           <div className="relative lg:col-span-5">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-ink-2">
-              <img
-                src={IMG_HERO}
-                alt="Persona entrenando con pesas en el gimnasio"
-                loading="eager"
-                referrerPolicy="no-referrer"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent" />
-            </div>
+            <div className="relative mx-auto flex aspect-[4/5] max-w-sm items-center justify-center">
+              {/* anillos decorativos tipo radar */}
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line" />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[19rem] w-[19rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line" />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[12rem] w-[12rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line" />
+              <div className="glow pointer-events-none absolute inset-0" />
 
-            <div className="absolute -bottom-6 -left-4 hidden w-64 rounded-2xl border border-line bg-ink-2/95 p-4 shadow-2xl backdrop-blur sm:block sm:-left-6 animate-[float_6s_ease-in-out_infinite]">
-              <div className="flex items-center justify-between">
-                <p className="kicker text-volt-deep">Tu plan de hoy</p>
-                <Zap size={14} className="text-volt" />
+              {/* card principal: hoja de rutina */}
+              <div className="relative w-80 -rotate-2 rounded-2xl border border-line-2 bg-paper p-6 pb-5 text-ink shadow-2xl animate-[float_6s_ease-in-out_infinite]">
+                <div className="kicker flex items-center justify-between text-ink-soft/70">
+                  <span>Tu plan de hoy</span>
+                  <span>PDF</span>
+                </div>
+                <p className="mt-3.5 font-display text-5xl font-black uppercase leading-[0.88] text-ink">
+                  Full Body
+                  <br />
+                  Día 1
+                </p>
+                <ul className="mt-4 flex flex-col">
+                  {[
+                    ['01', 'Sentadilla', '4×8'],
+                    ['02', 'Press banca', '4×10'],
+                    ['03', 'Remo con barra', '3×12'],
+                  ].map(([n, e, s]) => (
+                    <li key={e} className="flex h-[60px] items-center gap-3.5 border-t border-line-2">
+                      <span className="kicker w-6 text-ink-soft/70">{n}</span>
+                      <span className="flex-1 text-lg font-semibold text-ink">{e}</span>
+                      <span className="font-display text-3xl font-extrabold leading-none text-ink">{s}</span>
+                      <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-ink">
+                        <Play size={13} className="translate-x-px fill-volt text-volt" />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="kicker border-t border-line-2 pt-3.5 text-ink-soft/70">
+                  Video y explicación en cada ejercicio
+                </p>
               </div>
-              <p className="mt-1 font-display text-lg font-bold text-white">Full Body · Día 1</p>
-              <ul className="mt-3 space-y-2 text-sm">
-                {[
-                  ['Sentadilla', '4×8'],
-                  ['Press banca', '4×10'],
-                  ['Remo con barra', '3×12'],
-                ].map(([e, s]) => (
-                  <li key={e} className="flex items-center justify-between text-muted">
-                    <span>{e}</span>
-                    <span className="font-semibold text-volt">{s}</span>
-                  </li>
-                ))}
-              </ul>
+
+              {/* card secundaria: técnica en video */}
+              <div className="absolute -bottom-10—con—con -left-30 hidden w-44 -rotate-3 rounded-2xl border border-line bg-olive p-2.5 shadow-xl sm:block">
+                <div className="relative flex h-[90px] items-center justify-center overflow-hidden rounded-xl bg-ink">
+                  <Dumbbell size={34} className="text-white/25" />
+                  <div className="absolute inset-x-2.5 bottom-2 flex items-center gap-2">
+                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-volt">
+                      <Play size={10} className="translate-x-px fill-ink text-ink" />
+                    </span>
+                    <span className="relative h-[3px] flex-1 rounded-full bg-paper/15">
+                      <span className="absolute inset-y-0 left-0 w-[38%] rounded-full bg-volt" />
+                    </span>
+                  </div>
+                </div>
+                <p className="kicker mt-2 pl-0.5 text-paper/60">Sentadilla · técnica</p>
+              </div>
+
+              {/* sticker: entrega en 48h */}
+              <div className="absolute -top-2 right-1 rotate-6 rounded-[10px] bg-volt px-4 py-2.5 text-center shadow-[0_14px_30px_-10px_rgba(0,0,0,0.6)]">
+                <span className="font-display text-xl font-extrabold uppercase leading-none tracking-wide text-ink">
+                  Entrega en 24 h
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ===================== MARQUEE ===================== */}
-      <section className="overflow-hidden border-b border-line bg-ink-2 py-5">
+      <section className="overflow-hidden border-b border-line bg-volt py-5">
         <div className="marquee">
           {[...disciplinas, ...disciplinas].map((d, i) => (
             <span key={i} className="flex items-center gap-6 whitespace-nowrap">
-              <span className="font-display text-2xl font-extrabold uppercase text-white/90">{d}</span>
-              <span className="text-volt">✦</span>
+              <span className="font-display text-2xl font-extrabold uppercase text-ink">{d}</span>
+              <span className="text-ink/40">✦</span>
             </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ===================== CÓMO FUNCIONA ===================== */}
+      <section id="como-funciona" className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+        <Reveal>
+          <div className="flex flex-col gap-5">
+            <p className="kicker text-volt">Cómo funciona</p>
+            <h2 className="font-display text-5xl font-black uppercase leading-[0.88] text-white sm:text-7xl lg:text-[6.5rem]">
+              Tres pasos
+              <br />
+              y a entrenar.
+            </h2>
+          </div>
+        </Reveal>
+        <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-6">
+          {pasos.map((p, i) => (
+            <Reveal key={p.n} delay={i * 100}>
+              <article className="flex flex-col gap-5 border-t border-white/15 pt-8">
+                <div
+                  className="font-display text-[9rem] font-black leading-[0.8] text-transparent"
+                  style={{ WebkitTextStroke: '1.5px var(--color-volt)' }}
+                >
+                  {p.n}
+                </div>
+                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] text-white sm:text-4xl">
+                  {p.titulo}
+                </h3>
+                <p className="max-w-[22rem] text-lg leading-relaxed text-muted">{p.texto}</p>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* ===================== BENEFICIOS ===================== */}
       <section className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
-        <div className="grid gap-14 lg:grid-cols-12 lg:items-center">
-          <Reveal className="lg:col-span-5">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-line bg-ink-2">
-              <img
-                src={IMG_BENEFITS}
-                alt="Entrenamiento funcional"
-                loading="lazy"
-                referrerPolicy="no-referrer"
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute bottom-4 left-4 right-4 rounded-2xl border border-white/10 bg-ink/80 p-4 backdrop-blur">
-                <div className="flex items-center gap-3">
-                  <BadgeCheck size={22} className="text-volt" />
-                  <p className="text-sm font-medium text-white">
-                    Diseñada por entrenadores, no por un algoritmo genérico.
-                  </p>
+        <Reveal>
+          <div className="flex flex-col gap-5">
+            <p className="kicker text-volt">Qué incluye</p>
+            <h2 className="font-display text-5xl font-black uppercase leading-[0.88] text-white sm:text-7xl lg:text-[6.5rem]">
+              Lista para entrenar.
+            </h2>
+          </div>
+        </Reveal>
+        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-12">
+          <Reveal className="md:col-span-7">
+            <article className="relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
+              <h3 className="font-display text-4xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
+                <span className="text-volt">Videos</span> en cada ejercicio
+              </h3>
+              <p className="max-w-md text-base leading-relaxed text-paper/60">
+                Mirás cómo se hace antes de hacerlo. Técnica y explicación, ejercicio por ejercicio.
+              </p>
+              <div className="relative mt-2 flex min-h-[230px] flex-grow items-center justify-center overflow-hidden rounded-xl border border-line bg-ink">
+                <Dumbbell size={80} className="text-white/15" strokeWidth={1.5} />
+                <div className="absolute inset-x-5 bottom-4 flex items-center gap-3.5">
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-volt">
+                    <Play size={14} className="translate-x-px fill-ink text-ink" />
+                  </span>
+                  <span className="relative h-1 flex-grow rounded-full bg-paper/15">
+                    <span className="absolute inset-y-0 left-0 w-[38%] rounded-full bg-volt" />
+                  </span>
+                  <span className="kicker text-paper/60">Sentadilla</span>
                 </div>
               </div>
-            </div>
+            </article>
           </Reveal>
-          <div className="lg:col-span-7">
-            <Reveal>
-              <SectionTitle
-                eyebrow="Por qué IMTraining"
-                title="No es una rutina genérica de internet."
-                subtitle="Es un plan construido alrededor de vos: tu nivel, tu tiempo y tus límites."
-              />
-            </Reveal>
-            <div className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
-              {beneficios.map((b, i) => (
-                <Reveal key={b.titulo} delay={i * 80} className="border-t border-line pt-5">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-volt/10 text-volt">
-                    <b.icon size={22} strokeWidth={1.75} />
+
+          <Reveal delay={80} className="md:col-span-5">
+            <article className="relative flex h-full flex-col gap-7 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
+              <div aria-hidden="true" className="relative h-[262px]">
+                <div className="absolute left-1/2 top-1.5 h-[250px] w-[190px] -translate-x-1/2">
+                  <div className="absolute inset-0 -rotate-[9deg] rounded-xl bg-[#c4beb0]" />
+                  <div className="absolute inset-0 -rotate-[4deg] rounded-xl bg-[#dad4c8]" />
+                  <div className="absolute inset-0 flex rotate-[1deg] flex-col gap-3 rounded-xl bg-paper p-5">
+                    <div className="flex items-center justify-between">
+                      <span className="kicker text-ink-soft/70">PDF</span>
+                      <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-ink">
+                        <Play size={9} className="translate-x-px fill-volt text-volt" />
+                      </span>
+                    </div>
+                    <div className="h-[9px] w-[82%] rounded-md bg-ink" />
+                    <div className="h-[7px] w-full rounded bg-[#c4beb0]" />
+                    <div className="h-[7px] w-[90%] rounded bg-[#c4beb0]" />
+                    <div className="h-[7px] w-[96%] rounded bg-[#c4beb0]" />
+                    <div className="h-[7px] w-[70%] rounded bg-[#c4beb0]" />
+                    <div className="h-[7px] w-[88%] rounded bg-[#c4beb0]" />
                   </div>
-                  <h3 className="mt-4 font-display text-lg font-bold text-white">{b.titulo}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted">{b.texto}</p>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== CÓMO FUNCIONA (claro) ===================== */}
-      <section className="bg-paper text-ink">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
-          <Reveal>
-            <SectionTitle light eyebrow="Simple y rápido" title="De tus datos al gym, en 3 pasos." />
-          </Reveal>
-          <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border border-line-2 bg-line-2 md:grid-cols-3">
-            {pasos.map((p, i) => (
-              <Reveal key={p.n} delay={i * 100} className="bg-paper p-8 lg:p-10">
-                <span className="numeral text-6xl text-ink/15">{p.n}</span>
-                <h3 className="mt-6 font-display text-2xl font-bold text-ink">{p.titulo}</h3>
-                <p className="mt-3 text-[0.95rem] leading-relaxed text-ink-soft">{p.texto}</p>
-              </Reveal>
-            ))}
-          </div>
-          <div className="mt-12">
-            <Button as="link" to="/pedido" variant="dark" size="lg">
-              Empezar ahora <ArrowRight size={18} />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ===================== RESULTADOS ===================== */}
-      <section className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
-        <Reveal>
-          <SectionTitle
-            center
-            eyebrow="Resultados reales"
-            title="Cambios que se miden, no que se prometen."
-            subtitle="Personas como vos que empezaron con un plan a medida. Estos son sus números."
-          />
-        </Reveal>
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {resultados.map((r, i) => (
-            <Reveal key={r.nombre} delay={i * 100}>
-              <div className="surface surface-hover flex h-full flex-col p-8">
-                <span className="kicker text-volt-deep">{r.objetivo}</span>
-                <p className="mt-4 font-display text-5xl font-extrabold text-white">{r.metrica}</p>
-                <p className="mt-1 text-sm text-muted">{r.detalle}</p>
-                <p className="mt-5 flex-1 text-[0.95rem] leading-relaxed text-white/80">
-                  “{r.texto}”
-                </p>
-                <p className="mt-6 border-t border-line pt-4 text-sm font-semibold text-white">
-                  {r.nombre}
+                </div>
+              </div>
+              <div className="flex flex-col gap-3.5">
+                <h3 className="font-display text-4xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
+                  <span className="text-volt">PDF</span> listo
+                  <br />
+                  para descargar
+                </h3>
+                <p className="max-w-sm text-base leading-relaxed text-paper/60">
+                  Te llega en 24 h. Llevalo en el celular o imprimilo.
                 </p>
               </div>
-            </Reveal>
-          ))}
+            </article>
+          </Reveal>
+
+          <Reveal delay={160} className="md:col-span-6">
+            <article className="flex h-full items-center gap-7 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
+              <span className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt">
+                <ShieldCheck size={34} strokeWidth={1.75} />
+              </span>
+              <div className="flex flex-col gap-3">
+                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+                  Adaptada a <span className="text-volt">lesiones</span>
+                </h3>
+                <p className="max-w-md text-[0.95rem] leading-relaxed text-paper/60">
+                  Contanos si tenés alguna lesión o molestia y tu rutina se arma teniéndola en cuenta.
+                </p>
+              </div>
+            </article>
+          </Reveal>
+
+          <Reveal delay={240} className="md:col-span-6">
+            <article className="flex h-full items-center gap-7 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
+              <span className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt">
+                <Dumbbell size={34} strokeWidth={1.75} />
+              </span>
+              <div className="flex flex-col gap-3">
+                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+                  Sin <span className="text-volt">plantillas</span> genéricas
+                </h3>
+                <p className="max-w-md text-[0.95rem] leading-relaxed text-paper/60">
+                  Tu plan se arma a partir de tus objetivos, tu cuerpo y tu tiempo.
+                </p>
+              </div>
+            </article>
+          </Reveal>
         </div>
       </section>
 
@@ -430,122 +624,95 @@ export default function Home() {
       <section id="nosotros" className="border-y border-line bg-ink-2/40">
         <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
           <Reveal>
-            <SectionTitle
-              center
-              eyebrow="Nosotros"
-              title="Quién arma tu rutina."
-              subtitle="Detrás de cada plan hay una persona real, no un algoritmo genérico."
-            />
-          </Reveal>
-          <div className="mt-14 grid items-center gap-10 lg:grid-cols-12">
-            <Reveal className="lg:col-span-5">
-              <TeamPhoto src="/equipo/ignacio.jpg" alt="Ignacio Molina" caption="CEO · IMTraining" />
-            </Reveal>
-            <Reveal delay={100} className="lg:col-span-7">
-              <span className="kicker text-volt-deep">Fundador</span>
-              <h3 className="mt-3 font-display text-3xl font-extrabold uppercase text-white sm:text-4xl">
-                Ignacio Molina
-              </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Badge tone="volt">CEO</Badge>
-                <Badge tone="muted">Profesor · arma tu rutina</Badge>
+            <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+              <div className="lg:col-span-8">
+                <p className="kicker mb-3 text-volt-deep">
+                  <span className="mr-2">—</span>Nosotros
+                </p>
+                <h2 className="text-[2.75rem] font-extrabold uppercase leading-[0.88] text-white sm:text-[4rem] lg:text-[5.25rem]">
+                  Quién arma
+                  <br />
+                  tu rutina.
+                </h2>
               </div>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-                Soy quien diseña personalmente cada rutina de IMTraining. Analizo tus datos,
-                tus objetivos y tus límites para armarte un plan hecho a tu medida —con la
-                técnica correcta y el acompañamiento que necesitás para progresar en serio.
+            </div>
+          </Reveal>
+
+          <div className="mt-16 grid items-start gap-14 lg:grid-cols-12">
+            <Reveal className="lg:col-span-5">
+              <TeamCard src="/equipo/ignacio.jpg" alt="Ignacio Molina" />
+            </Reveal>
+
+            <Reveal delay={100} className="lg:col-span-7 lg:pl-8">
+              <p className="max-w-xl text-[1.7rem] font-semibold leading-[1.2] text-white sm:text-[2.15rem]">
+                Soy quien diseña <span className="text-volt">personalmente</span> cada rutina de
+                IMTRAINING.
               </p>
-              <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-                {[
-                  'Planes 100% personalizados',
-                  'Cada ejercicio con video',
-                  'Adaptado a lesiones y límites',
-                  'Seguimiento real de tu progreso',
-                ].map((t) => (
-                  <li key={t} className="flex items-center gap-2 text-sm text-white/80">
-                    <Check size={16} className="shrink-0 text-volt" /> {t}
-                  </li>
-                ))}
-              </ul>
-              <Button as="link" to="/pedido" className="mt-8">
-                Pedir mi rutina <ArrowRight size={18} />
-              </Button>
+              <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted">
+                Analizo tus datos, tus objetivos y tus límites para armarte un plan hecho a tu
+                medida con la técnica correcta y el acompañamiento que necesitás para progresar
+                en serio.
+              </p>
+
+              <div className="mt-10">
+                <p className="kicker text-volt-deep">Cómo trabajo</p>
+                <ol className="mt-4">
+                  {comoTrabajo.map((p) => (
+                    <li
+                      key={p.n}
+                      className="grid grid-cols-[2.5rem_1fr] items-center gap-x-6 gap-y-1.5 border-t border-line py-5 last:border-b sm:grid-cols-[2.5rem_9rem_1fr]"
+                    >
+                      <span className="kicker text-volt-deep">{p.n}</span>
+                      <h3 className="font-display text-2xl font-extrabold uppercase text-white">
+                        {p.titulo}
+                      </h3>
+                      <p className="col-span-2 text-[0.95rem] leading-relaxed text-muted sm:col-span-1">
+                        {p.texto}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="mt-10 grid grid-cols-1 gap-4 sm:max-w-xl sm:grid-cols-3">
+                <div className="rounded-2xl border border-line bg-olive p-5">
+                  <p className="font-display text-5xl font-black leading-none text-paper">
+                    <span className="text-volt">+</span>500
+                  </p>
+                  <p className="kicker mt-2.5 text-paper/60">Rutinas entregadas</p>
+                </div>
+                <div className="rounded-2xl border border-line bg-olive p-5">
+                  <p className="flex items-center gap-2 font-display text-5xl font-black leading-none text-paper">
+                    4,9 <Star size={24} fill="currentColor" strokeWidth={0} className="text-volt" />
+                  </p>
+                  <p className="kicker mt-2.5 text-paper/60">Valoración media</p>
+                </div>
+                <div className="rounded-2xl border border-line bg-olive p-5">
+                  <p className="font-display text-5xl font-black leading-none text-paper">
+                    <span className="text-volt">+</span>5
+                  </p>
+                  <p className="kicker mt-2.5 text-paper/60">Años de experiencia</p>
+                </div>
+              </div>
+
+              <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <Button as="link" to="/pedido" size="lg">
+                  Pedir mi rutina <ArrowRight size={18} />
+                </Button>
+                <Button as="link" to="/#precios" variant="ghost">
+                  Ver planes y precios <ArrowRight size={16} />
+                </Button>
+              </div>
             </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ===================== PLANES ===================== */}
-      <section className="border-y border-line bg-ink-2/50">
+      {/* ===================== TESTIMONIOS ===================== */}
+      <section className="overflow-hidden bg-ink-2/40">
         <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
           <Reveal>
-            <SectionTitle
-              center
-              eyebrow="Precios claros"
-              title="Elegí cómo querés entrenar."
-              subtitle="Sin letra chica. Elegí el plan que mejor se adapta a tu objetivo."
-            />
-          </Reveal>
-          <div className="mt-14 grid items-center gap-6 md:grid-cols-3">
-            {plans.map((p, i) => {
-              const featured = p.destacado
-              return (
-                <Reveal key={p.id} delay={i * 80}>
-                  <div
-                    className={`relative flex h-full flex-col rounded-3xl border p-8 ${
-                      featured
-                        ? 'border-volt bg-volt text-ink shadow-glow md:scale-[1.04]'
-                        : 'surface text-white'
-                    }`}
-                  >
-                    {featured && (
-                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-ink px-4 py-1 text-xs font-bold uppercase tracking-wide text-volt">
-                        Más elegido
-                      </span>
-                    )}
-                    <h3 className="font-display text-xl font-bold">{p.nombre}</h3>
-                    <p className={`mt-2 text-sm ${featured ? 'text-ink/70' : 'text-muted'}`}>
-                      {p.descripcion}
-                    </p>
-                    <p className="mt-6 font-display text-5xl font-extrabold">
-                      ${fmt(p.precio)}
-                      <span className={`text-base font-normal ${featured ? 'text-ink/60' : 'text-muted'}`}>
-                        {' '}
-                        {p.moneda}
-                      </span>
-                    </p>
-                    <ul className="mt-6 flex-1 space-y-3 text-sm">
-                      {p.beneficios.map((b) => (
-                        <li key={b} className="flex gap-2.5">
-                          <Check size={18} className={featured ? 'shrink-0 text-ink' : 'shrink-0 text-volt'} />
-                          <span className={featured ? 'text-ink/80' : 'text-white/80'}>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      as="link"
-                      to="/pedido"
-                      variant={featured ? 'dark' : 'primary'}
-                      className="mt-8 w-full"
-                    >
-                      Elegir {p.nombre}
-                    </Button>
-                  </div>
-                </Reveal>
-              )
-            })}
-          </div>
-          <p className="mt-8 flex items-center justify-center gap-2 text-sm text-muted">
-            <ShieldCheck size={16} className="text-volt" /> Pago 100% seguro · Descarga inmediata al confirmar
-          </p>
-        </div>
-      </section>
-
-      {/* ===================== TESTIMONIOS (claro) ===================== */}
-      <section className="overflow-hidden bg-paper-2 text-ink">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
-          <Reveal>
-            <SectionTitle light center eyebrow="Reseñas de Google" title="Lo que dicen en Google." />
+            <SectionTitle center eyebrow="Reseñas de Google" title="Lo que dicen en Google." />
           </Reveal>
           <div className="mt-8 flex justify-center">
             <div className="flex items-center gap-3 rounded-full border border-line-2 bg-paper px-5 py-2.5 shadow-sm">
@@ -563,25 +730,252 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===================== PLANES ===================== */}
+      <section id="precios" className="border-y border-line bg-ink-2/50">
+        <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+          <Reveal>
+            <SectionTitle
+              center
+              eyebrow="Precios claros"
+              title="Elegí cómo querés entrenar."
+              subtitle="Sin letra chica. Elegí el plan que mejor se adapta a tu objetivo."
+            />
+          </Reveal>
+          <div className="mt-14 grid items-stretch gap-6 md:grid-cols-3">
+            {plans.map((p, i) => {
+              const featured = p.destacado
+              const isElite = p.id === 'plan-elite'
+              const meta = PLAN_META[p.id] || {}
+              const mutedColor = isElite ? 'rgba(0,0,0,0.72)' : featured ? 'rgba(0,0,0,0.82)' : '#4A5545'
+              const accent = isElite ? 'var(--color-ember)' : featured ? 'var(--color-volt)' : 'var(--color-paper)'
+              return (
+                <Reveal key={p.id} delay={i * 80}>
+                  <article
+                    className={`relative flex h-full flex-col gap-7 rounded-[28px] p-9 pb-8 text-black ${
+                      featured ? 'pt-[72px]' : ''
+                    }`}
+                    style={{
+                      background: accent,
+                      boxShadow: isElite
+                        ? '0 50px 90px -40px rgba(255, 85, 0, 0.65), 0 0 0 1px rgba(255, 85, 0, 0.35)'
+                        : featured
+                          ? '0 50px 90px -40px color-mix(in srgb, var(--color-volt) 55%, transparent)'
+                          : undefined,
+                    }}
+                  >
+                    {featured && (
+                      <span
+                        className="absolute left-1/2 top-[-16px] -translate-x-1/2 whitespace-nowrap rounded-full px-[18px] py-[9px] text-xs font-bold uppercase tracking-[0.16em]"
+                        style={{ background: '#000000', color: 'var(--color-volt)', boxShadow: '0 0 0 4px #000000' }}
+                      >
+                        Más elegido
+                      </span>
+                    )}
+
+                    <div className="flex items-center justify-between">
+                      <span className="kicker" style={{ color: mutedColor }}>
+                        {meta.kicker}
+                      </span>
+                      <Barcode bars={meta.bars} color="#000000" />
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <h3 className="font-display text-[42px] font-extrabold uppercase leading-[0.95] sm:text-[50px]">
+                        {p.nombre}
+                      </h3>
+                      <p className="min-h-[48px] text-base leading-snug" style={{ color: mutedColor }}>
+                        {p.descripcion}
+                      </p>
+                    </div>
+
+                    <div className="flex min-h-[132px] flex-col gap-2">
+                      <div className="flex items-end gap-2.5">
+                        <span className="font-display text-[60px] font-black leading-[0.9] sm:text-[80px]">
+                          ${fmt(p.precio)}
+                        </span>
+                        <span className="kicker pb-2" style={{ color: mutedColor }}>
+                          {p.moneda}
+                        </span>
+                      </div>
+                      <span className="kicker" style={{ color: mutedColor }}>
+                        {meta.caption}
+                      </span>
+                      {isElite && (
+                        <span className="text-sm font-bold">
+                          Equivale a ${fmt(Math.round(p.precio / 3))} por mes
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-6">
+                      <div
+                        className="h-px"
+                        style={{
+                          background: isElite ? 'rgba(0,0,0,0.22)' : featured ? 'rgba(0,0,0,0.24)' : '#C4BEB0',
+                        }}
+                      />
+                      <ul className="flex flex-col gap-4 text-base font-medium leading-snug">
+                        {p.beneficios.map((b, bi) => {
+                          const special = bi === 0 && b.startsWith('Todo lo del')
+                          return (
+                            <li key={b} className={`flex items-center gap-3 ${special ? 'font-bold' : ''}`}>
+                              {special ? <PlanPlusMarker bg="#000000" stroke={accent} /> : <PlanCheck color="#000000" />}
+                              <span>{b}</span>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+
+                    <Link
+                      to="/pedido"
+                      className="mt-auto flex h-[60px] items-center justify-center gap-3 rounded-[14px] text-[17px] font-bold transition-transform hover:-translate-y-0.5"
+                      style={{ background: '#000000', color: accent }}
+                    >
+                      Elegir {p.nombre}
+                      <ArrowRight size={20} />
+                    </Link>
+                  </article>
+                </Reveal>
+              )
+            })}
+          </div>
+          <p className="mt-8 flex items-center justify-center gap-2 text-sm text-muted">
+            <ShieldCheck size={16} className="text-volt" /> Pago 100% seguro · Descarga inmediata al confirmar
+          </p>
+        </div>
+      </section>
+
       {/* ===================== FAQ ===================== */}
-      <section className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+      <section id="preguntas" className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Reveal>
-              <SectionTitle eyebrow="Dudas frecuentes" title="Todo lo que querés saber." />
-              <p className="mt-6 text-muted">
-                ¿Te quedó otra duda? Escribinos y te respondemos antes de que compres.
-              </p>
-              <Button as="link" to="/pedido" variant="outline" className="mt-6">
-                Empezar mi rutina <ArrowRight size={16} />
-              </Button>
+              <div className="rounded-3xl border border-line bg-ink-2/60 p-8">
+                <p className="kicker mb-3 text-volt-deep">
+                  <span className="mr-2">—</span>Dudas frecuentes
+                </p>
+                <h2 className="text-balance font-display text-4xl font-extrabold leading-[0.95] text-white sm:text-5xl">
+                  Todo lo que querés saber.
+                </h2>
+                <p className="mt-6 text-muted">
+                  ¿Te quedó otra duda? Escribinos y te respondemos antes de que compres.
+                </p>
+                <Button as="link" to="/pedido" variant="outline" className="mt-6">
+                  Empezar mi rutina <ArrowRight size={16} />
+                </Button>
+              </div>
             </Reveal>
           </div>
-          <div className="lg:col-span-8">
-            <Reveal>
-              {faqs.map((f, i) => (
+          <div className="lg:col-span-8 lg:pl-8">
+            <Reveal className="flex flex-col gap-3">
+              {[
+                {
+                  q: '¿Cómo se personaliza mi rutina?',
+                  a: (
+                    <div className="flex flex-col gap-4">
+                      <p>Nos contás estos datos:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {['Edad', 'Peso', 'Altura', 'Objetivos', 'Experiencia', 'Lesiones', 'Tiempo disponible'].map((t) => (
+                          <span
+                            key={t}
+                            className="flex h-[34px] items-center rounded-full bg-volt/15 px-[14px] text-sm font-medium text-paper"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="max-w-[600px]">
+                        Con esos datos armamos un plan hecho exclusivamente para vos, no una
+                        plantilla genérica.
+                      </p>
+                    </div>
+                  ),
+                },
+                {
+                  q: '¿En cuánto tiempo la recibo?',
+                  a: (
+                    <p className="max-w-[600px]">
+                      Tu rutina se entrega en 24 h, en PDF listo para descargar, con videos y
+                      explicación de cada ejercicio.
+                    </p>
+                  ),
+                },
+                {
+                  q: '¿Sirve si nunca entrené?',
+                  a: (
+                    <p className="max-w-[600px]">
+                      Sí. Nos contás tu experiencia y armamos el plan desde donde estás hoy, con la
+                      técnica correcta y cada ejercicio explicado en video.
+                    </p>
+                  ),
+                },
+                {
+                  q: '¿Y si tengo una lesión o limitación?',
+                  a: (
+                    <p className="max-w-[600px]">
+                      Contanos tus lesiones y límites al pedir tu rutina. Las tenemos en cuenta al
+                      elegir y adaptar cada ejercicio.
+                    </p>
+                  ),
+                },
+                {
+                  q: '¿Puedo pedir ajustes después?',
+                  a: (
+                    <div className="flex flex-col gap-4">
+                      <p className="max-w-[600px]">
+                        Con el Plan Mensual y el Elite, tu rutina se revisa y se ajusta cada 2
+                        semanas.
+                      </p>
+                      <span className="inline-flex min-h-[34px] max-w-max items-center rounded-full border-[1.5px] border-dashed border-paper/30 px-[14px] font-mono text-xs tracking-wide text-muted">
+                        [Condiciones de ajustes en Rutina Única]
+                      </span>
+                    </div>
+                  ),
+                },
+                {
+                  q: '¿Cómo pago?',
+                  a: (
+                    <div className="flex flex-col gap-4">
+                      <p className="max-w-[600px]">
+                        El pago es 100% seguro y la descarga es inmediata al confirmar.
+                      </p>
+                      <span className="inline-flex min-h-[34px] max-w-max items-center rounded-full border-[1.5px] border-dashed border-paper/30 px-[14px] font-mono text-xs tracking-wide text-muted">
+                        [Medios de pago aceptados]
+                      </span>
+                    </div>
+                  ),
+                },
+                {
+                  q: '¿Te quedó otra duda?',
+                  a: (
+                    <div className="flex flex-col gap-4">
+                      <p className="max-w-[600px]">
+                        Escribinos y te respondemos antes de que compres. Elegí el canal que prefieras:
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        <a
+                          href="https://wa.me/5491112345678"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 rounded-lg border border-line bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-volt hover:text-volt"
+                        >
+                          <MessageCircle size={16} /> WhatsApp
+                        </a>
+                        <a
+                          href="mailto:hola@imtraining.com"
+                          className="inline-flex items-center gap-2 rounded-lg border border-line bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-volt hover:text-volt"
+                        >
+                          <Mail size={16} /> hola@imtraining.com
+                        </a>
+                      </div>
+                    </div>
+                  ),
+                },
+              ].map((f, i) => (
                 <FaqItem
                   key={f.q}
+                  index={i}
                   q={f.q}
                   a={f.a}
                   open={openFaq === i}
@@ -594,26 +988,71 @@ export default function Home() {
       </section>
 
       {/* ===================== CTA FINAL ===================== */}
-      <section className="relative overflow-hidden bg-volt text-ink">
-        <div className="mx-auto flex max-w-7xl flex-col items-start gap-8 px-5 py-20 lg:flex-row lg:items-center lg:justify-between lg:py-24">
-          <div>
-            <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-ink/60">
-              <Clock size={16} /> Entrega en 48 horas
-            </p>
-            <h2 className="mt-4 max-w-2xl text-4xl font-extrabold uppercase leading-none md:text-6xl">
-              ¿Listo para entrenar en serio?
-            </h2>
-            <p className="mt-4 max-w-md text-lg text-ink/70">
-              Empezá hoy tu rutina personalizada y llevá tu entrenamiento al próximo nivel.
-            </p>
+      <section id="pedir" className="mx-auto max-w-7xl px-5 py-20 lg:px-16 lg:py-28">
+        <div className="relative overflow-hidden rounded-[2rem] bg-volt text-ink">
+          {/* Decorative concentric circles */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2rem]">
+            <svg
+              width="640"
+              height="640"
+              viewBox="0 0 640 640"
+              fill="none"
+              className="absolute -right-[150px] -top-[130px]"
+              aria-hidden="true"
+            >
+              <circle cx="320" cy="320" r="316" stroke="rgba(0,0,0,0.28)" strokeWidth="2" />
+              <circle
+                cx="320"
+                cy="320"
+                r="280"
+                stroke="rgba(0,0,0,0.14)"
+                strokeWidth="26"
+                strokeDasharray="3 11.66"
+              />
+              <circle cx="320" cy="320" r="176" stroke="rgba(0,0,0,0.28)" strokeWidth="2" />
+              <circle cx="320" cy="320" r="38" stroke="rgba(0,0,0,0.4)" strokeWidth="3" />
+            </svg>
           </div>
-          <Button as="link" to="/pedido" variant="dark" size="lg" className="shrink-0">
-            Pedir mi rutina{' '}
-            <ArrowUpRight
-              size={18}
-              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </Button>
+
+          <div className="relative grid grid-cols-1 gap-6 px-8 py-16 sm:px-14 sm:py-20 lg:grid-cols-12 lg:px-[72px] lg:py-[80px]">
+            <div className="flex flex-col items-start gap-6 lg:col-span-7">
+              <p className="kicker flex items-center gap-2.5 text-[13px] text-ink">
+                <Clock size={18} strokeWidth={2.2} /> Entrega en 24 horas
+              </p>
+
+              <h2 className="font-display text-[3.75rem] font-black uppercase leading-[0.86] sm:text-[5.5rem] lg:text-[8rem]">
+                <span className="block">¿Listo para</span>
+                <span className="block">entrenar</span>
+                <span className="block">en serio?</span>
+              </h2>
+
+              <p className="max-w-[500px] text-lg leading-relaxed text-ink sm:text-[21px]">
+                Empezá hoy tu rutina personalizada y llevá tu entrenamiento al próximo nivel.
+              </p>
+
+              <div className="mt-3 flex flex-col items-start gap-4">
+                <Link
+                  to="/pedido"
+                  className="group inline-flex h-16 items-center gap-3 rounded-[14px] bg-ink px-[34px] text-lg font-bold text-volt transition-transform hover:-translate-y-0.5"
+                >
+                  Pedir mi rutina
+                  <ArrowRight
+                    size={20}
+                    strokeWidth={2.4}
+                    className="transition-transform group-hover:translate-x-0.5"
+                  />
+                </Link>
+                <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px] font-semibold text-ink">
+                  <li className="flex items-center gap-2">
+                    <Check size={16} strokeWidth={2.6} /> Armá tu plan en menos de 2 minutos
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={16} strokeWidth={2.6} /> Pago 100% seguro
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

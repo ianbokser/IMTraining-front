@@ -4,7 +4,6 @@ import { OrderProvider } from './features/order/OrderContext'
 import { AuthProvider, RequireAuth, RequireAdmin } from './features/auth/AuthContext'
 
 import Home from './routes/Home'
-import EjemploRutina from './routes/EjemploRutina'
 import PedidoRutina from './routes/PedidoRutina'
 import Checkout from './routes/Checkout'
 import Login from './routes/Login'
@@ -21,7 +20,6 @@ export default function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/ejemplo" element={<EjemploRutina />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/admin/login" element={<Navigate to="/login" replace />} />

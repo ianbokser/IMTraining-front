@@ -4,7 +4,7 @@ const puntos = [
   'Rutina 100% personalizada',
   'Videos explicativos de cada ejercicio',
   'Adaptada a lesiones y a tu tiempo',
-  'Entrega en PDF en 48 horas',
+  'Entrega en PDF en 24 horas',
 ]
 
 // Panel lateral de marca para las pantallas de auth (login/registro).

@@ -13,6 +13,7 @@ export default function MisRutinas() {
   const [selected, setSelected] = useState(null)
   const [routine, setRoutine] = useState(null)
   const [routineLoading, setRoutineLoading] = useState(false)
+  const [logs, setLogs] = useState({})
 
   useEffect(() => {
     api
@@ -30,6 +31,7 @@ export default function MisRutinas() {
   const openOrder = (order) => {
     setSelected(order)
     setRoutine(null)
+    setLogs({})
     if (!order?.tieneRutina) return
     setRoutineLoading(true)
     api
@@ -37,6 +39,18 @@ export default function MisRutinas() {
       .then(setRoutine)
       .catch((e) => setError(e.message))
       .finally(() => setRoutineLoading(false))
+    api.getExerciseLogs(order.id).then(setLogs).catch(() => setLogs({}))
+  }
+
+  // Guarda (o actualiza) el peso de una semana para un ejercicio y actualiza el
+  // estado local al toque, sin esperar a recargar toda la rutina.
+  const handleLogWeight = async (routineExerciseId, semana, peso) => {
+    await api.logExerciseWeight(selected.id, { routineExerciseId, semana, peso })
+    setLogs((prev) => {
+      const current = prev[routineExerciseId] || []
+      const next = current.filter((l) => l.semana !== semana).concat({ semana, peso })
+      return { ...prev, [routineExerciseId]: next }
+    })
   }
 
   if (loading) {
@@ -145,7 +159,7 @@ export default function MisRutinas() {
                     <FileDown size={18} /> Descargar PDF
                   </Button>
                 </div>
-                <RoutineView routine={routine} />
+                <RoutineView routine={routine} logs={logs} onLogWeight={handleLogWeight} />
               </div>
             ) : (
               <EmptyPanel>No pudimos cargar la rutina. Probá de nuevo en un rato.</EmptyPanel>

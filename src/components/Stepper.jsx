@@ -20,7 +20,7 @@ export default function Stepper({ steps, current }) {
               <span
                 className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-sm font-bold transition-all duration-300 ${
                   active
-                    ? 'bg-volt text-ink shadow-[0_0_0_4px_rgba(46,230,240,0.18)]'
+                    ? 'bg-volt text-ink shadow-[0_0_0_4px_rgba(198,210,75,0.18)]'
                     : done
                       ? 'bg-volt/20 text-volt'
                       : 'border border-line text-muted'

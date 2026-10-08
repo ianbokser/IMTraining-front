@@ -4,7 +4,9 @@ import Footer from './Footer'
 
 export default function Layout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative isolate flex min-h-screen flex-col">
+      <div aria-hidden="true" className="site-bg site-bg--glow" />
+      <div aria-hidden="true" className="site-bg site-bg--grid" />
       <Navbar />
       <main className="flex-1">
         <Outlet />

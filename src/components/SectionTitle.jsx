@@ -8,14 +8,14 @@ export default function SectionTitle({ eyebrow, title, subtitle, center, light }
         </p>
       )}
       <h2
-        className={`text-balance text-4xl font-extrabold md:text-5xl ${
+        className={`text-balance text-[2.75rem] font-extrabold leading-[0.92] sm:text-[4rem] lg:text-[5.25rem] ${
           light ? 'text-ink' : 'text-white'
         }`}
       >
         {title}
       </h2>
       {subtitle && (
-        <p className={`mt-4 text-lg leading-relaxed ${light ? 'text-ink-soft' : 'text-muted'}`}>
+        <p className={`mt-5 text-lg leading-relaxed sm:text-xl ${light ? 'text-ink-soft' : 'text-muted'}`}>
           {subtitle}
         </p>
       )}

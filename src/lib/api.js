@@ -1,5 +1,5 @@
 // Cliente HTTP centralizado. Todo pega al backend real.
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3005'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3006'
 
 // Token guardado por AuthContext, para las rutas protegidas.
 function authHeader() {
@@ -122,6 +122,19 @@ export const api = {
 
   getOrderRoutine(orderId) {
     return request(`/api/orders/${orderId}/routine`, { headers: authHeader() })
+  },
+
+  // Progreso de peso: { [routineExerciseId]: [{ semana, peso }, ...] }
+  getExerciseLogs(orderId) {
+    return request(`/api/orders/${orderId}/routine/logs`, { headers: authHeader() })
+  },
+
+  logExerciseWeight(orderId, { routineExerciseId, semana, peso }) {
+    return request(`/api/orders/${orderId}/routine/logs`, {
+      method: 'POST',
+      headers: authHeader(),
+      body: JSON.stringify({ routineExerciseId, semana, peso }),
+    })
   },
 
   // --- Admin ---
