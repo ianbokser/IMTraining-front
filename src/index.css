@@ -226,6 +226,48 @@ body::after {
   50% { box-shadow: 0 0 0 8px rgba(198, 210, 75, 0); }
 }
 
+/* ---- Pelotita que recorre los pasos 01 → 02 → 03 (rojo → amarillo → verde) ---- */
+@keyframes stepBallMove {
+  0%, 12%  { left: 16.6667%; }
+  33%, 45% { left: 50%; }
+  66%, 90% { left: 83.3333%; }
+  100%     { left: 16.6667%; }
+}
+@keyframes stepBallColor {
+  0%, 16%  { background-color: #ef4444; box-shadow: 0 0 22px rgba(239, 68, 68, 0.95), 0 0 60px rgba(239, 68, 68, 0.55); }
+  33%, 48% { background-color: #facc15; box-shadow: 0 0 22px rgba(250, 204, 21, 0.95), 0 0 60px rgba(250, 204, 21, 0.55); }
+  66%, 92% { background-color: #22c55e; box-shadow: 0 0 28px rgba(34, 197, 94, 1), 0 0 72px rgba(34, 197, 94, 0.65); }
+  100%     { background-color: #ef4444; box-shadow: 0 0 22px rgba(239, 68, 68, 0.95), 0 0 60px rgba(239, 68, 68, 0.55); }
+}
+@keyframes stepBallHop {
+  0%, 12%   { transform: translate(-50%, -50%) scale(1); }
+  22%       { transform: translate(-50%, calc(-50% - 24px)) scale(1.1); }
+  33%, 45%  { transform: translate(-50%, -50%) scale(1); }
+  55%       { transform: translate(-50%, calc(-50% - 24px)) scale(1.1); }
+  66%, 100% { transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes stepBallPulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.15; transform: translate(-50%, -50%) scale(2.1); }
+}
+.step-ball {
+  background-image: radial-gradient(circle at 32% 28%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 55%);
+  animation:
+    stepBallMove 6s cubic-bezier(0.65, 0, 0.35, 1) infinite,
+    stepBallColor 6s linear infinite,
+    stepBallHop 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.step-ball-aura {
+  animation:
+    stepBallMove 6s cubic-bezier(0.65, 0, 0.35, 1) infinite,
+    stepBallColor 6s linear infinite,
+    stepBallPulse 1.6s ease-in-out infinite;
+  filter: blur(2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-ball, .step-ball-aura { animation: none; }
+}
+
 /* ---- Reveal on scroll (IntersectionObserver toggle) ---- */
 .reveal {
   opacity: 0;

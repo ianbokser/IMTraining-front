@@ -366,7 +366,7 @@ export default function Home() {
               <span className="kicker text-white/80">Rutinas personalizadas · PDF con videos</span>
             </div>
             <h1 className="mt-6 font-display text-[3.75rem] font-black uppercase leading-[0.86] text-white sm:text-[4.75rem] lg:text-[6.75rem] xl:text-[8.5rem]">
-              Tu rutina de gym,
+              Tu rutina de entrenamiento,
               <br />
               <span className="text-gradient">hecha para vos.</span>
             </h1>
@@ -391,18 +391,6 @@ export default function Home() {
               ))}
             </ul>
 
-            <dl className="mt-10 grid max-w-lg grid-cols-3 gap-6 border-t border-line pt-8">
-              {[
-                { k: '+500', v: 'rutinas entregadas' },
-                { k: '4,9★', v: 'valoración media' },
-                { k: '24hs', v: 'de entrega' },
-              ].map((s) => (
-                <div key={s.v}>
-                  <dt className="numeral text-3xl text-white">{s.k}</dt>
-                  <dd className="mt-1 text-xs text-muted">{s.v}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
           {/* Ejemplo de rutina, sin foto de stock */}
@@ -485,6 +473,37 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===================== STATS STRIP ===================== */}
+      <section className="relative overflow-hidden border-b border-line">
+        <div className="grid-bg pointer-events-none absolute inset-0 opacity-60" />
+        <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 py-14 sm:grid-cols-3 lg:py-16">
+          <Reveal>
+            <div className="text-center sm:text-left">
+              <p className="font-display text-6xl font-black leading-none text-white sm:text-7xl">
+                <span className="text-volt">+</span>500
+              </p>
+              <p className="kicker mt-3 text-muted">Rutinas entregadas</p>
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="text-center">
+              <p className="flex items-center justify-center gap-3 font-display text-6xl font-black leading-none text-white sm:text-7xl">
+                4,9 <Star size={40} fill="currentColor" strokeWidth={0} className="text-volt" />
+              </p>
+              <p className="kicker mt-3 text-muted">Valoración media</p>
+            </div>
+          </Reveal>
+          <Reveal delay={160}>
+            <div className="text-center sm:text-right">
+              <p className="font-display text-6xl font-black leading-none text-white sm:text-7xl">
+                48<span className="text-volt">h</span>
+              </p>
+              <p className="kicker mt-3 text-muted">De entrega</p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ===================== CÓMO FUNCIONA ===================== */}
       <section id="como-funciona" className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
         <Reveal>
@@ -514,6 +533,30 @@ export default function Home() {
               </article>
             </Reveal>
           ))}
+        </div>
+
+        {/* Pelotita que viaja de 01 → 03 cambiando de color */}
+        <div
+          aria-hidden="true"
+          className="relative mx-auto mt-14 hidden h-16 w-full max-w-5xl md:block"
+        >
+          <div className="absolute left-[16.6667%] right-[16.6667%] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-[#ef4444]/0 via-[#facc15]/40 to-[#22c55e]/0" />
+          <div className="absolute left-[16.6667%] right-[16.6667%] top-1/2 h-px -translate-y-1/2 border-t border-dashed border-white/10" />
+
+          {[
+            { left: '16.6667%', ring: 'ring-[#ef4444]/50' },
+            { left: '50%', ring: 'ring-[#facc15]/50' },
+            { left: '83.3333%', ring: 'ring-[#22c55e]/50' },
+          ].map((n) => (
+            <span
+              key={n.left}
+              className={`absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink ring-2 ${n.ring}`}
+              style={{ left: n.left }}
+            />
+          ))}
+
+          <span className="step-ball-aura pointer-events-none absolute top-1/2 h-7 w-7 rounded-full" />
+          <span className="step-ball pointer-events-none absolute top-1/2 h-6 w-6 rounded-full" />
         </div>
       </section>
 
@@ -851,19 +894,32 @@ export default function Home() {
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Reveal>
-              <div className="rounded-3xl border border-line bg-ink-2/60 p-8">
-                <p className="kicker mb-3 text-volt-deep">
-                  <span className="mr-2">—</span>Dudas frecuentes
-                </p>
-                <h2 className="text-balance font-display text-4xl font-extrabold leading-[0.95] text-white sm:text-5xl">
-                  Todo lo que querés saber.
+              <div className="relative overflow-hidden rounded-3xl border border-line bg-olive p-8 text-paper">
+                <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-paper/5" />
+                <div className="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full border border-paper/5" />
+
+                <span className="relative grid h-12 w-12 place-items-center rounded-xl bg-volt/15 text-volt">
+                  <MessageCircle size={22} strokeWidth={2.2} />
+                </span>
+
+                <h2 className="relative mt-6 text-balance font-display text-4xl font-extrabold uppercase leading-[0.95] text-white sm:text-5xl">
+                  ¿Te quedó otra duda?
                 </h2>
-                <p className="mt-6 text-muted">
-                  ¿Te quedó otra duda? Escribinos y te respondemos antes de que compres.
+                <p className="relative mt-4 text-paper/70">
+                  Escribinos y te respondemos antes de que compres.
                 </p>
-                <Button as="link" to="/pedido" variant="outline" className="mt-6">
-                  Empezar mi rutina <ArrowRight size={16} />
-                </Button>
+
+                <div className="relative mt-6 flex items-center gap-2 rounded-xl border border-dashed border-paper/25 px-4 py-3 font-mono text-[13px] tracking-wide text-paper/70">
+                  Escribinos a: <span className="text-paper">[WhatsApp o email]</span>
+                </div>
+
+                <p className="relative mt-7 kicker text-volt-deep">¿Todo claro?</p>
+                <Link
+                  to="/pedido"
+                  className="relative mt-3 flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-volt text-base font-bold text-ink transition-transform hover:-translate-y-0.5"
+                >
+                  Empezar mi rutina <ArrowRight size={18} />
+                </Link>
               </div>
             </Reveal>
           </div>
@@ -943,32 +999,6 @@ export default function Home() {
                       <span className="inline-flex min-h-[34px] max-w-max items-center rounded-full border-[1.5px] border-dashed border-paper/30 px-[14px] font-mono text-xs tracking-wide text-muted">
                         [Medios de pago aceptados]
                       </span>
-                    </div>
-                  ),
-                },
-                {
-                  q: '¿Te quedó otra duda?',
-                  a: (
-                    <div className="flex flex-col gap-4">
-                      <p className="max-w-[600px]">
-                        Escribinos y te respondemos antes de que compres. Elegí el canal que prefieras:
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        <a
-                          href="https://wa.me/5491112345678"
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 rounded-lg border border-line bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-volt hover:text-volt"
-                        >
-                          <MessageCircle size={16} /> WhatsApp
-                        </a>
-                        <a
-                          href="mailto:hola@imtraining.com"
-                          className="inline-flex items-center gap-2 rounded-lg border border-line bg-white/[0.03] px-4 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-volt hover:text-volt"
-                        >
-                          <Mail size={16} /> hola@imtraining.com
-                        </a>
-                      </div>
                     </div>
                   ),
                 },

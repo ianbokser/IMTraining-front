@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Timer, Repeat, Layers, StickyNote, Weight, TrendingUp, TrendingDown } from 'lucide-react'
 import Reveal from './Reveal'
 
@@ -7,82 +7,135 @@ import Reveal from './Reveal'
 // `logs` + `onLogWeight` son opcionales: cuando están presentes (sólo en "Mis rutinas"),
 // cada ejercicio muestra su progreso de peso semana a semana y un formulario para cargarlo.
 export default function RoutineView({ routine, logs, onLogWeight }) {
-  if (!routine?.dias?.length) return null
+  const dias = routine?.dias || []
+  const [selectedIdx, setSelectedIdx] = useState(0)
+
+  // Si cambia la rutina (otro pedido), reseteamos al primer día.
+  const routineKey = routine?.id ?? routine?.nombre ?? dias.length
+  useEffect(() => {
+    setSelectedIdx(0)
+  }, [routineKey])
+
+  const safeIdx = Math.min(selectedIdx, Math.max(dias.length - 1, 0))
+  const dia = dias[safeIdx]
+
+  const options = useMemo(
+    () => dias.map((d, i) => ({ idx: i, label: d.dia || `Día ${i + 1}` })),
+    [dias],
+  )
+
+  if (!dias.length) return null
+
   return (
-    <div className="space-y-14">
-      {routine.dias.map((dia, i) => (
-        <div key={`${dia.dia}-${i}`}>
-          <div className="mb-6 flex items-baseline gap-4 border-b border-line pb-4">
-            <span className="numeral text-4xl text-volt">{String(i + 1).padStart(2, '0')}</span>
-            <h3 className="font-display text-2xl font-extrabold uppercase text-white">{dia.dia}</h3>
-          </div>
-          <div className="space-y-8">
-            {(dia.bloques || []).map((bloque, bi) => (
-              <div key={`${bloque.bloque}-${bi}`}>
-                {bloque.bloque && (
-                  <div className="mb-4 flex items-center gap-3">
-                    <span className="h-4 w-1 rounded-full bg-volt" />
-                    <h4 className="font-display text-sm font-bold uppercase tracking-wide text-volt">
-                      {bloque.bloque}
-                    </h4>
-                  </div>
-                )}
-                <div className="grid gap-5 md:grid-cols-2">
-                  {bloque.ejercicios.map((ej, j) => (
-                    <Reveal
-                      as="article"
-                      key={`${ej.nombre}-${j}`}
-                      delay={j * 60}
-                      className="surface surface-hover flex flex-col p-6"
-                    >
-                      <h4 className="font-display text-lg font-bold text-white">{ej.nombre}</h4>
-                      {ej.explicacion && (
-                        <p className="mt-1.5 text-sm leading-relaxed text-muted">{ej.explicacion}</p>
-                      )}
-                      <div className="mt-5 flex flex-wrap gap-2 text-xs">
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
-                          <Layers size={13} className="text-volt" /> {ej.series} series
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
-                          <Repeat size={13} className="text-volt" /> {ej.reps} reps
-                        </span>
-                        {ej.descanso && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
-                            <Timer size={13} className="text-volt" /> {ej.descanso}
-                          </span>
-                        )}
-                      </div>
-                      {ej.nota && (
-                        <p className="mt-3 flex items-start gap-2 rounded-xl border border-volt/25 bg-volt/5 px-3 py-2 text-sm text-white/90">
-                          <StickyNote size={15} className="mt-0.5 shrink-0 text-volt" /> {ej.nota}
-                        </p>
-                      )}
-                      {ej.videoEmbedUrl && (
-                        <div className="mt-4 aspect-video w-full overflow-hidden rounded-xl bg-ink">
-                          <iframe
-                            className="h-full w-full"
-                            src={ej.videoEmbedUrl}
-                            title={ej.nombre}
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        </div>
-                      )}
-                      {onLogWeight && ej.routineExerciseId && (
-                        <WeightTracker
-                          entries={logs?.[ej.routineExerciseId] || []}
-                          onSave={(semana, peso) => onLogWeight(ej.routineExerciseId, semana, peso)}
-                        />
-                      )}
-                    </Reveal>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+    <div>
+      <div className="mb-8 rounded-2xl border border-line bg-ink-2 p-4">
+        <label className="kicker mb-3 block text-volt-deep">Elegí el día</label>
+        <div className="flex flex-wrap gap-2">
+          {options.map((opt) => {
+            const active = opt.idx === safeIdx
+            return (
+              <button
+                key={opt.idx}
+                type="button"
+                onClick={() => setSelectedIdx(opt.idx)}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                  active
+                    ? 'border-volt bg-volt text-ink'
+                    : 'border-line bg-ink text-white/80 hover:border-line-strong'
+                }`}
+              >
+                <span className={`numeral text-xs ${active ? 'text-ink' : 'text-volt'}`}>
+                  {String(opt.idx + 1).padStart(2, '0')}
+                </span>
+                {opt.label}
+              </button>
+            )
+          })}
         </div>
-      ))}
+        <select
+          value={safeIdx}
+          onChange={(e) => setSelectedIdx(Number(e.target.value))}
+          className="mt-3 w-full rounded-lg border border-line bg-ink px-3 py-2 text-sm text-white outline-none focus:border-volt sm:hidden"
+        >
+          {options.map((opt) => (
+            <option key={opt.idx} value={opt.idx}>
+              {`${String(opt.idx + 1).padStart(2, '0')} · ${opt.label}`}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <div className="mb-6 flex items-baseline gap-4 border-b border-line pb-4">
+          <span className="numeral text-4xl text-volt">{String(safeIdx + 1).padStart(2, '0')}</span>
+          <h3 className="font-display text-2xl font-extrabold uppercase text-white">{dia.dia}</h3>
+        </div>
+        <div className="space-y-8">
+          {(dia.bloques || []).map((bloque, bi) => (
+            <div key={`${bloque.bloque}-${bi}`}>
+              {bloque.bloque && (
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="h-4 w-1 rounded-full bg-volt" />
+                  <h4 className="font-display text-sm font-bold uppercase tracking-wide text-volt">
+                    {bloque.bloque}
+                  </h4>
+                </div>
+              )}
+              <div className="grid gap-5 md:grid-cols-2">
+                {bloque.ejercicios.map((ej, j) => (
+                  <Reveal
+                    as="article"
+                    key={`${ej.nombre}-${j}`}
+                    delay={j * 60}
+                    className="surface surface-hover flex flex-col p-6"
+                  >
+                    <h4 className="font-display text-lg font-bold text-white">{ej.nombre}</h4>
+                    {ej.explicacion && (
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted">{ej.explicacion}</p>
+                    )}
+                    <div className="mt-5 flex flex-wrap gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
+                        <Layers size={13} className="text-volt" /> {ej.series} series
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
+                        <Repeat size={13} className="text-volt" /> {ej.reps} reps
+                      </span>
+                      {ej.descanso && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
+                          <Timer size={13} className="text-volt" /> {ej.descanso}
+                        </span>
+                      )}
+                    </div>
+                    {ej.nota && (
+                      <p className="mt-3 flex items-start gap-2 rounded-xl border border-volt/25 bg-volt/5 px-3 py-2 text-sm text-white/90">
+                        <StickyNote size={15} className="mt-0.5 shrink-0 text-volt" /> {ej.nota}
+                      </p>
+                    )}
+                    {ej.videoEmbedUrl && (
+                      <div className="mt-4 aspect-video w-full overflow-hidden rounded-xl bg-ink">
+                        <iframe
+                          className="h-full w-full"
+                          src={ej.videoEmbedUrl}
+                          title={ej.nombre}
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    )}
+                    {onLogWeight && ej.routineExerciseId && (
+                      <WeightTracker
+                        entries={logs?.[ej.routineExerciseId] || []}
+                        onSave={(semana, peso) => onLogWeight(ej.routineExerciseId, semana, peso)}
+                      />
+                    )}
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
