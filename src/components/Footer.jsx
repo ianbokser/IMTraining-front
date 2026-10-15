@@ -5,9 +5,14 @@ import Button from './Button'
 
 export default function Footer() {
   return (
-    <footer className="border-t border-line bg-ink">
+    <footer className="relative overflow-hidden border-t border-line bg-ink">
+      {/* Logo de marca como fondo del footer */}
+      <div
+        aria-hidden="true"
+        />
+        className="pointer-events-none absolute inset-x-0 bottom-0 top-24 bg-[url('/Footer_IM.jpg')] bg-[length:90%_auto] bg-center bg-no-repeat opacity-20 mix-blend-screen"
       {/* Banda CTA */}
-      <div className="mx-auto max-w-7xl px-5">
+      <div className="relative mx-auto max-w-7xl px-5">
         <div className="surface relative -mb-16 translate-y-[-3rem] overflow-hidden p-8 sm:p-12">
           <div className="glow pointer-events-none absolute -right-20 -top-20 h-72 w-72" />
           <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
@@ -24,7 +29,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-5 pb-12 pt-24">
+      <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-24">
         <div className="grid gap-10 md:grid-cols-[1.6fr_1fr_1fr]">
           <div>
             <Logo />

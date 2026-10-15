@@ -39,6 +39,24 @@ const disciplinas = ['Fuerza', 'Hipertrofia', 'Pérdida de grasa', 'Resistencia'
 
 const fmt = (n) => new Intl.NumberFormat('es-AR').format(n)
 
+function WhatsAppIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.52 3.48A11.86 11.86 0 0 0 12.05 0C5.5 0 .17 5.33.17 11.88c0 2.09.55 4.13 1.6 5.93L0 24l6.37-1.67a11.9 11.9 0 0 0 5.68 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.24-6.16-3.42-8.41ZM12.06 21.4h-.01a9.5 9.5 0 0 1-4.85-1.33l-.35-.21-3.78.99 1.01-3.68-.23-.38a9.5 9.5 0 0 1-1.46-5.08c0-5.26 4.28-9.54 9.55-9.54a9.5 9.5 0 0 1 6.75 2.8 9.5 9.5 0 0 1 2.8 6.75c0 5.26-4.28 9.54-9.54 9.54Zm5.24-7.14c-.29-.14-1.7-.84-1.96-.94-.26-.1-.46-.14-.65.14-.2.29-.74.94-.9 1.13-.17.19-.33.22-.62.07-.29-.14-1.21-.44-2.3-1.42a8.63 8.63 0 0 1-1.6-1.99c-.17-.29-.02-.44.13-.59.13-.13.29-.33.44-.5.14-.17.19-.29.29-.48.1-.19.05-.36-.02-.5-.07-.14-.65-1.57-.9-2.14-.23-.56-.47-.48-.65-.49l-.55-.01c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.4 0 1.41 1.03 2.78 1.17 2.97.14.19 2.03 3.1 4.92 4.35.69.3 1.22.47 1.64.6.69.22 1.32.19 1.81.11.55-.08 1.7-.69 1.94-1.37.24-.68.24-1.26.17-1.37-.07-.12-.26-.19-.55-.33Z" />
+    </svg>
+  )
+}
+
+function InstagramIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
+
 // Metadata editorial de cada card de precios (no viene de la API): kicker tipo
 // "código de barras", leyenda bajo el precio y cantidad de barras del ícono.
 const PLAN_META = {
@@ -354,6 +372,50 @@ export default function Home() {
 
   return (
     <div>
+      {/* ===================== BANNERS SOCIALES FLOTANTES ===================== */}
+      <aside
+        aria-label="Contacto rápido"
+        className="pointer-events-none fixed left-3 top-1/2 z-40 hidden -translate-y-1/2 sm:block"
+      >
+        <ul className="pointer-events-auto flex flex-col gap-3">
+          {[
+            {
+              label: 'Instagram',
+              href: 'https://instagram.com/imtraining',
+              Icon: InstagramIcon,
+              hover: 'hover:bg-[#E1306C] hover:border-[#E1306C]',
+            },
+            {
+              label: 'WhatsApp',
+              href: 'https://wa.me/5491100000000',
+              Icon: WhatsAppIcon,
+              hover: 'hover:bg-[#25D366] hover:border-[#25D366]',
+            },
+            {
+              label: 'Email',
+              href: 'mailto:hola@imtraining.com',
+              Icon: Mail,
+              hover: 'hover:bg-volt hover:border-volt hover:text-ink',
+            },
+          ].map(({ label, href, Icon, hover }) => (
+            <li key={label}>
+              <a
+                href={href}
+                target={href.startsWith('http') ? '_blank' : undefined}
+                rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                aria-label={label}
+                className={`group relative grid h-11 w-11 place-items-center rounded-xl border border-line bg-ink/80 text-white/80 shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-110 hover:text-white ${hover}`}
+              >
+                <Icon size={18} />
+                <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-ink px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-lg ring-1 ring-line transition-opacity duration-150 group-hover:opacity-100">
+                  {label}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
       {/* ===================== HERO ===================== */}
       <section className="relative overflow-hidden border-b border-line">
         <div className="grid-bg pointer-events-none absolute inset-0" />
@@ -381,7 +443,7 @@ export default function Home() {
             </div>
 
             <ul className="mt-8 flex flex-wrap gap-2.5">
-              {['Entrega en 48 h', 'Adaptada a lesiones', 'Pago seguro'].map((t) => (
+              {['Entrega en 24 h', 'Adaptada a lesiones', 'Pago seguro'].map((t) => (
                 <li
                   key={t}
                   className="flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/90"
@@ -435,7 +497,7 @@ export default function Home() {
               </div>
 
               {/* card secundaria: técnica en video */}
-              <div className="absolute -bottom-10—con—con -left-30 hidden w-44 -rotate-3 rounded-2xl border border-line bg-olive p-2.5 shadow-xl sm:block">
+              <div className="absolute -bottom-20 -left-30 hidden w-44 -rotate-3 rounded-2xl border border-line bg-olive p-2.5 shadow-xl sm:block">
                 <div className="relative flex h-[90px] items-center justify-center overflow-hidden rounded-xl bg-ink">
                   <Dumbbell size={34} className="text-white/25" />
                   <div className="absolute inset-x-2.5 bottom-2 flex items-center gap-2">
@@ -450,7 +512,7 @@ export default function Home() {
                 <p className="kicker mt-2 pl-0.5 text-paper/60">Sentadilla · técnica</p>
               </div>
 
-              {/* sticker: entrega en 48h */}
+              {/* sticker: entrega en 24h */}
               <div className="absolute -top-2 right-1 rotate-6 rounded-[10px] bg-volt px-4 py-2.5 text-center shadow-[0_14px_30px_-10px_rgba(0,0,0,0.6)]">
                 <span className="font-display text-xl font-extrabold uppercase leading-none tracking-wide text-ink">
                   Entrega en 24 h
@@ -496,7 +558,7 @@ export default function Home() {
           <Reveal delay={160}>
             <div className="text-center sm:text-right">
               <p className="font-display text-6xl font-black leading-none text-white sm:text-7xl">
-                48<span className="text-volt">h</span>
+                24<span className="text-volt">h</span>
               </p>
               <p className="kicker mt-3 text-muted">De entrega</p>
             </div>
@@ -671,7 +733,7 @@ export default function Home() {
               <div className="lg:col-span-8">
                 <p className="kicker mb-3 text-volt-deep">
                   <span className="mr-2">—</span>Nosotros
-                </p>
+                </p>48
                 <h2 className="text-[2.75rem] font-extrabold uppercase leading-[0.88] text-white sm:text-[4rem] lg:text-[5.25rem]">
                   Quién arma
                   <br />
@@ -683,7 +745,7 @@ export default function Home() {
 
           <div className="mt-16 grid items-start gap-14 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
-              <TeamCard src="/equipo/ignacio.jpg" alt="Ignacio Molina" />
+              <TeamCard src="/foto%20ceo1.jpeg" alt="Ignacio Molina" />
             </Reveal>
 
             <Reveal delay={100} className="lg:col-span-7 lg:pl-8">

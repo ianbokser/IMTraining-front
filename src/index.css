@@ -148,10 +148,19 @@
 /* ---- Grilla de fondo tenue (hero) ---- */
 .grid-bg {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 75%);
+  animation: gridDriftLocal 20s linear infinite;
+  will-change: background-position;
+}
+@keyframes gridDriftLocal {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 56px 56px, 56px 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .grid-bg { animation: none; }
 }
 
 /* ---- Glow radial reutilizable ---- */
@@ -182,9 +191,18 @@
 }
 .site-bg--grid {
   background-image:
-    linear-gradient(rgba(230, 233, 228, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(230, 233, 228, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(230, 233, 228, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230, 233, 228, 0.11) 1px, transparent 1px);
   background-size: 72px 72px;
+  animation: gridDrift 24s linear infinite;
+  will-change: background-position;
+}
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 72px 72px, 72px 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-bg--grid { animation: none; }
 }
 
 /* ---- Grano sutil sobre toda la página ---- */
