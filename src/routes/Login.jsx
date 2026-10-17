@@ -79,6 +79,14 @@ export default function Login() {
                 {error}
               </p>
             )}
+            <div className="flex justify-end">
+              <Link
+                to="/olvide-password"
+                className="text-xs font-medium text-volt hover:underline"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
             <Button type="submit" size="lg" className="w-full" disabled={loading}>
               {loading ? 'Ingresando…' : 'Ingresar'}
             </Button>

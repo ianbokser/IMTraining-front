@@ -7,6 +7,8 @@ import Home from './routes/Home'
 import PedidoRutina from './routes/PedidoRutina'
 import Checkout from './routes/Checkout'
 import Login from './routes/Login'
+import ForgotPassword from './routes/ForgotPassword'
+import ResetPassword from './routes/ResetPassword'
 import Registro from './routes/Registro'
 import AdminPanel from './routes/AdminPanel'
 import RutinaBuilder from './routes/admin/RutinaBuilder'
@@ -21,6 +23,8 @@ export default function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/olvide-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/admin/login" element={<Navigate to="/login" replace />} />
             <Route

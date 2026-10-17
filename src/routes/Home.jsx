@@ -19,6 +19,7 @@ import Button from '../components/Button'
 import SectionTitle from '../components/SectionTitle'
 import Reveal from '../components/Reveal'
 import GoogleG from '../components/GoogleG'
+import CopyEmail from '../components/CopyEmail'
 import { testimonios, faqs } from '../lib/constants'
 import { api } from '../lib/api'
 
@@ -300,9 +301,75 @@ function FaqItem({ index, q, a, open, onToggle }) {
   )
 }
 
-// Card del fundador: foto real si existe en /public, si no, un placeholder
-// con la misma composición que la referencia (marco, esquinas, ícono).
-function TeamCard({ src, alt }) {
+// Video de presentación: autoplay cuando entra al viewport, loop, sin controles.
+// Intenta reproducir con audio; si el browser lo bloquea, arranca en mute y
+// activa el audio en la primera interacción del usuario.
+function AutoPlayVideo({ src }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    let interactionCleanup = null
+    const enableAudioOnInteraction = () => {
+      const unmute = () => {
+        el.muted = false
+        el.play().catch(() => {})
+        cleanup()
+      }
+      const cleanup = () => {
+        window.removeEventListener('pointerdown', unmute)
+        window.removeEventListener('keydown', unmute)
+        window.removeEventListener('touchstart', unmute)
+        interactionCleanup = null
+      }
+      window.addEventListener('pointerdown', unmute, { once: true })
+      window.addEventListener('keydown', unmute, { once: true })
+      window.addEventListener('touchstart', unmute, { once: true })
+      interactionCleanup = cleanup
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.muted = false
+          el.play().catch(() => {
+            el.muted = true
+            el.play().catch(() => {})
+            enableAudioOnInteraction()
+          })
+        } else {
+          el.pause()
+        }
+      },
+      { threshold: 0.4 }
+    )
+    io.observe(el)
+
+    return () => {
+      io.disconnect()
+      interactionCleanup?.()
+    }
+  }, [])
+
+  return (
+    <video
+      ref={ref}
+      src={src}
+      loop
+      playsInline
+      preload="metadata"
+      disablePictureInPicture
+      controlsList="nodownload noplaybackrate nofullscreen noremoteplayback"
+      onContextMenu={(e) => e.preventDefault()}
+      className="h-full w-full object-cover"
+    />
+  )
+}
+
+// Card del fundador: video de presentación, con fallback a imagen/placeholder.
+function TeamCard({ src, alt, videoSrc }) {
   const [ok, setOk] = useState(true)
   return (
     <div className="relative">
@@ -314,7 +381,9 @@ function TeamCard({ src, alt }) {
 
       <article className="relative overflow-hidden rounded-[1.75rem] bg-paper p-4 text-ink shadow-2xl">
         <div className="relative h-[420px] overflow-hidden rounded-2xl bg-ink">
-          {ok ? (
+          {videoSrc ? (
+            <AutoPlayVideo src={videoSrc} />
+          ) : ok ? (
             <img
               src={src}
               alt={alt}
@@ -381,38 +450,58 @@ export default function Home() {
           {[
             {
               label: 'Instagram',
-              href: 'https://instagram.com/imtraining',
+              href: 'https://instagram.com/Imtrainingokk',
               Icon: InstagramIcon,
               hover: 'hover:bg-[#E1306C] hover:border-[#E1306C]',
             },
             {
               label: 'WhatsApp',
-              href: 'https://wa.me/5491100000000',
+              href: 'https://wa.me/5491123824035',
               Icon: WhatsAppIcon,
               hover: 'hover:bg-[#25D366] hover:border-[#25D366]',
             },
             {
               label: 'Email',
-              href: 'mailto:hola@imtraining.com',
+              copyEmail: 'Imtrainingokk@gmail.com',
               Icon: Mail,
               hover: 'hover:bg-volt hover:border-volt hover:text-ink',
             },
-          ].map(({ label, href, Icon, hover }) => (
-            <li key={label}>
-              <a
-                href={href}
-                target={href.startsWith('http') ? '_blank' : undefined}
-                rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                aria-label={label}
-                className={`group relative grid h-11 w-11 place-items-center rounded-xl border border-line bg-ink/80 text-white/80 shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-110 hover:text-white ${hover}`}
-              >
-                <Icon size={18} />
-                <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-ink px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-lg ring-1 ring-line transition-opacity duration-150 group-hover:opacity-100">
-                  {label}
-                </span>
-              </a>
-            </li>
-          ))}
+          ].map(({ label, href, copyEmail, Icon, hover }) => {
+            const baseClass = `group relative grid h-11 w-11 place-items-center rounded-xl border border-line bg-ink/80 text-white/80 shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-110 hover:text-white ${hover}`
+            return (
+              <li key={label}>
+                {copyEmail ? (
+                  <CopyEmail
+                    email={copyEmail}
+                    aria-label={`Copiar email ${copyEmail}`}
+                    className={baseClass}
+                  >
+                    {(copied) => (
+                      <>
+                        <Icon size={18} />
+                        <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-ink px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-lg ring-1 ring-line transition-opacity duration-150 group-hover:opacity-100 data-[copied=true]:opacity-100" data-copied={copied || undefined}>
+                          {copied ? '¡Copiado!' : `Copiar ${copyEmail}`}
+                        </span>
+                      </>
+                    )}
+                  </CopyEmail>
+                ) : (
+                  <a
+                    href={href}
+                    target={href.startsWith('http') ? '_blank' : undefined}
+                    rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    aria-label={label}
+                    className={baseClass}
+                  >
+                    <Icon size={18} />
+                    <span className="pointer-events-none absolute left-full ml-3 whitespace-nowrap rounded-md bg-ink px-2.5 py-1 text-xs font-medium text-white opacity-0 shadow-lg ring-1 ring-line transition-opacity duration-150 group-hover:opacity-100">
+                      {label}
+                    </span>
+                  </a>
+                )}
+              </li>
+            )
+          })}
         </ul>
       </aside>
 
@@ -581,7 +670,7 @@ export default function Home() {
         <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-6">
           {pasos.map((p, i) => (
             <Reveal key={p.n} delay={i * 100}>
-              <article className="flex flex-col gap-5 border-t border-white/15 pt-8">
+              <article className="flex flex-col items-center gap-5 border-t border-white/15 pt-8 text-center">
                 <div
                   className="font-display text-[9rem] font-black leading-[0.8] text-transparent"
                   style={{ WebkitTextStroke: '1.5px var(--color-volt)' }}
@@ -591,7 +680,9 @@ export default function Home() {
                 <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] text-white sm:text-4xl">
                   {p.titulo}
                 </h3>
-                <p className="max-w-[22rem] text-lg leading-relaxed text-muted">{p.texto}</p>
+                <p className="mx-auto max-w-[22rem] text-lg leading-relaxed text-muted">
+                  {p.texto}
+                </p>
               </article>
             </Reveal>
           ))}
@@ -600,7 +691,7 @@ export default function Home() {
         {/* Pelotita que viaja de 01 → 03 cambiando de color */}
         <div
           aria-hidden="true"
-          className="relative mx-auto mt-14 hidden h-16 w-full max-w-5xl md:block"
+          className="relative mt-14 hidden h-16 w-full md:block"
         >
           <div className="absolute left-[16.6667%] right-[16.6667%] top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-[#ef4444]/0 via-[#facc15]/40 to-[#22c55e]/0" />
           <div className="absolute left-[16.6667%] right-[16.6667%] top-1/2 h-px -translate-y-1/2 border-t border-dashed border-white/10" />
@@ -745,7 +836,11 @@ export default function Home() {
 
           <div className="mt-16 grid items-start gap-14 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
-              <TeamCard src="/foto%20ceo1.jpeg" alt="Ignacio Molina" />
+              <TeamCard
+                src="/foto%20ceo1.jpeg"
+                alt="Ignacio Molina"
+                videoSrc="/Video_Presentacion.mp4"
+              />
             </Reveal>
 
             <Reveal delay={100} className="lg:col-span-7 lg:pl-8">
@@ -971,8 +1066,36 @@ export default function Home() {
                   Escribinos y te respondemos antes de que compres.
                 </p>
 
-                <div className="relative mt-6 flex items-center gap-2 rounded-xl border border-dashed border-paper/25 px-4 py-3 font-mono text-[13px] tracking-wide text-paper/70">
-                  Escribinos a: <span className="text-paper">[WhatsApp o email]</span>
+                <div className="relative mt-6 flex flex-col gap-1 rounded-xl border border-dashed border-paper/25 px-4 py-3 font-mono text-[13px] tracking-wide text-paper/70">
+                  <a
+                    href="https://wa.me/5491123824035"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-paper hover:text-volt"
+                  >
+                    WhatsApp: +54 9 11 2382-4035
+                  </a>
+                  <a
+                    href="https://instagram.com/Imtrainingokk"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-paper hover:text-volt"
+                  >
+                    Instagram: @Imtrainingokk
+                  </a>
+                  <CopyEmail
+                    email="Imtrainingokk@gmail.com"
+                    className="inline-flex items-center gap-2 text-left text-paper hover:text-volt"
+                  >
+                    {(copied) => (
+                      <>
+                        Email: Imtrainingokk@gmail.com
+                        <span className="text-[11px] uppercase tracking-wider text-volt-deep">
+                          {copied ? '¡copiado!' : '(copiar)'}
+                        </span>
+                      </>
+                    )}
+                  </CopyEmail>
                 </div>
 
                 <p className="relative mt-7 kicker text-volt-deep">¿Todo claro?</p>

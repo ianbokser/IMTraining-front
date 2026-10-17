@@ -115,6 +115,28 @@ export const api = {
     return request('/api/auth/me', { headers: authHeader() })
   },
 
+  // Pide un mail con el link de reset. Devuelve siempre ok (no filtra existencia).
+  forgotPassword(email) {
+    return request('/api/auth/password/forgot', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    })
+  },
+
+  // Valida el token antes de mostrar el formulario de nueva contraseña.
+  verifyResetToken(token) {
+    const qs = new URLSearchParams({ token }).toString()
+    return request(`/api/auth/password/reset?${qs}`)
+  },
+
+  // Setea la nueva contraseña con el token recibido por mail.
+  resetPassword(token, password) {
+    return request('/api/auth/password/reset', {
+      method: 'POST',
+      body: JSON.stringify({ token, password }),
+    })
+  },
+
   // --- Cliente: mis rutinas ---
   getMyOrders() {
     return request('/api/orders/mine', { headers: authHeader() })

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Camera, Video, Mail, ArrowUpRight } from 'lucide-react'
 import { Logo } from './Navbar'
 import Button from './Button'
+import CopyEmail from './CopyEmail'
 
 export default function Footer() {
   return (
@@ -9,8 +10,8 @@ export default function Footer() {
       {/* Logo de marca como fondo del footer */}
       <div
         aria-hidden="true"
-        />
         className="pointer-events-none absolute inset-x-0 bottom-0 top-24 bg-[url('/Footer_IM.jpg')] bg-[length:90%_auto] bg-center bg-no-repeat opacity-20 mix-blend-screen"
+      />
       {/* Banda CTA */}
       <div className="relative mx-auto max-w-7xl px-5">
         <div className="surface relative -mb-16 translate-y-[-3rem] overflow-hidden p-8 sm:p-12">
@@ -62,21 +63,69 @@ export default function Footer() {
           <div>
             <p className="kicker mb-4 text-muted">Seguinos</p>
             <div className="flex gap-3">
-              {[
-                { Icon: Camera, label: 'Instagram' },
-                { Icon: Video, label: 'YouTube' },
-                { Icon: Mail, label: 'Email' },
-              ].map(({ Icon, label }) => (
-                <a
-                  key={label}
-                  href="#"
-                  className="grid h-10 w-10 place-items-center rounded-xl border border-line text-white/70 transition-colors hover:border-volt hover:text-volt"
-                  aria-label={label}
-                >
-                  <Icon size={18} />
-                </a>
-              ))}
+              <a
+                href="https://instagram.com/Imtrainingokk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="grid h-10 w-10 place-items-center rounded-xl border border-line text-white/70 transition-colors hover:border-volt hover:text-volt"
+                aria-label="Instagram"
+              >
+                <Camera size={18} />
+              </a>
+              <CopyEmail
+                email="Imtrainingokk@gmail.com"
+                className="relative grid h-10 w-10 place-items-center rounded-xl border border-line text-white/70 transition-colors hover:border-volt hover:text-volt"
+              >
+                {(copied) => (
+                  <>
+                    <Mail size={18} />
+                    <span
+                      className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow ring-1 ring-line transition-opacity duration-150 data-[visible=true]:opacity-100"
+                      data-visible={copied || undefined}
+                    >
+                      {copied ? '¡Copiado!' : 'Copiar email'}
+                    </span>
+                  </>
+                )}
+              </CopyEmail>
             </div>
+            <ul className="mt-5 space-y-1.5 text-sm text-white/60">
+              <li>
+                <a
+                  href="https://wa.me/5491123824035"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-volt"
+                >
+                  WhatsApp: +54 9 11 2382-4035
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://instagram.com/Imtrainingokk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-volt"
+                >
+                  @Imtrainingokk
+                </a>
+              </li>
+              <li>
+                <CopyEmail
+                  email="Imtrainingokk@gmail.com"
+                  className="inline-flex items-center gap-2 text-left transition-colors hover:text-volt"
+                >
+                  {(copied) => (
+                    <>
+                      Imtrainingokk@gmail.com
+                      <span className="text-[10px] uppercase tracking-wider text-volt-deep">
+                        {copied ? '¡copiado!' : '(copiar)'}
+                      </span>
+                    </>
+                  )}
+                </CopyEmail>
+              </li>
+            </ul>
           </div>
         </div>
 

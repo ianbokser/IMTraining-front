@@ -14,15 +14,20 @@ const links = [
 
 export function Logo({ onClick }) {
   return (
-    <Link to="/" onClick={onClick} className="group flex items-center gap-2.5">
+    <Link
+      to="/"
+      onClick={onClick}
+      aria-label="IMTRAINING — Inicio"
+      className="group inline-flex items-center gap-2.5 leading-none"
+    >
       <span
         role="img"
-        aria-label="IMTRAINING"
-        className="h-9 w-9 shrink-0 rounded-xl bg-ink-2 bg-cover bg-center bg-no-repeat ring-1 ring-line transition-transform group-hover:scale-105"
+        aria-label="IM"
+        className="block h-9 w-9 shrink-0 rounded-xl bg-ink-2 bg-cover bg-center bg-no-repeat ring-1 ring-line transition-transform group-hover:scale-105"
         style={{ backgroundImage: "url('/Logo_IM.jpeg')" }}
       />
-      <span className="font-display text-lg font-extrabold tracking-tight text-white">
-        IM<span className="text-volt">TRAINING</span>
+      <span className="font-display text-xl font-extrabold leading-none tracking-tight text-volt">
+        TRAINING
       </span>
     </Link>
   )
