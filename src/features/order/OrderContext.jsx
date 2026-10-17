@@ -15,8 +15,8 @@ const emptyOrder = {
   intensidad: 'Intermedio',
   disponibilidad: '45-60 min',
   deportes: '',
-  // plan elegido
-  plan: 'Rutina Única',
+  // plan elegido (debe coincidir con un `nombre` de data/plans.js del back)
+  plan: 'Plan Mensual',
 }
 
 export function OrderProvider({ children }) {

@@ -59,11 +59,22 @@ function InstagramIcon({ size = 18 }) {
 }
 
 // Metadata editorial de cada card de precios (no viene de la API): kicker tipo
-// "código de barras", leyenda bajo el precio y cantidad de barras del ícono.
+// Metadata visual de cada plan (kicker arriba, leyenda bajo el precio y
+// cantidad de barras del "código de barras").
+// El `accent` define el color del card: 'volt' (verde) o 'ember' (naranja).
 const PLAN_META = {
-  'plan-basico': { kicker: '01 — Rutina', caption: 'Pago único', bars: 2 },
-  'plan-pro': { kicker: '02 — Seguimiento', caption: 'Por mes', bars: 4 },
-  'plan-elite': { kicker: '03 — Acompañamiento', caption: 'Por 3 meses', bars: 6 },
+  'plan-mensual': {
+    kicker: '01 — 30 días',
+    caption: '30 días de rutina',
+    bars: 2,
+    accent: 'volt',
+  },
+  'plan-premium': {
+    kicker: '02 — 60 días',
+    caption: '60 días de rutina',
+    bars: 4,
+    accent: 'ember',
+  },
 }
 
 // Ícono decorativo tipo "código de barras" usado en el header de cada card.
@@ -105,6 +116,27 @@ function PlanCheck({ color = '#000000' }) {
       className="shrink-0"
     >
       <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  )
+}
+
+// "X" para los ítems que el plan NO incluye (van tachados al lado).
+function PlanCross({ color = '#000000' }) {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="2.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <path d="M6 6l12 12" />
+      <path d="M18 6L6 18" />
     </svg>
   )
 }
@@ -824,7 +856,7 @@ export default function Home() {
               <div className="lg:col-span-8">
                 <p className="kicker mb-3 text-volt-deep">
                   <span className="mr-2">—</span>Nosotros
-                </p>48
+                </p>
                 <h2 className="text-[2.75rem] font-extrabold uppercase leading-[0.88] text-white sm:text-[4rem] lg:text-[5.25rem]">
                   Quién arma
                   <br />
@@ -941,34 +973,35 @@ export default function Home() {
               subtitle="Sin letra chica. Elegí el plan que mejor se adapta a tu objetivo."
             />
           </Reveal>
-          <div className="mt-14 grid items-stretch gap-6 md:grid-cols-3">
+          <div className="mx-auto mt-14 grid max-w-5xl items-stretch gap-6 md:grid-cols-2">
             {plans.map((p, i) => {
-              const featured = p.destacado
-              const isElite = p.id === 'plan-elite'
               const meta = PLAN_META[p.id] || {}
-              const mutedColor = isElite ? 'rgba(0,0,0,0.72)' : featured ? 'rgba(0,0,0,0.82)' : '#4A5545'
-              const accent = isElite ? 'var(--color-ember)' : featured ? 'var(--color-volt)' : 'var(--color-paper)'
+              const isEmber = meta.accent === 'ember'
+              const accent = isEmber ? 'var(--color-ember)' : 'var(--color-volt)'
+              // Texto "secundario" sobre el fondo del card. Negro con opacidad lee bien
+              // tanto sobre volt como sobre ember.
+              const mutedColor = isEmber ? 'rgba(0,0,0,0.72)' : 'rgba(0,0,0,0.72)'
+              const dividerColor = isEmber ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.22)'
+              const hasBadge = Boolean(p.destacado && p.badgeLabel)
               return (
                 <Reveal key={p.id} delay={i * 80}>
                   <article
                     className={`relative flex h-full flex-col gap-7 rounded-[28px] p-9 pb-8 text-black ${
-                      featured ? 'pt-[72px]' : ''
+                      hasBadge ? 'pt-[72px]' : ''
                     }`}
                     style={{
                       background: accent,
-                      boxShadow: isElite
+                      boxShadow: isEmber
                         ? '0 50px 90px -40px rgba(255, 85, 0, 0.65), 0 0 0 1px rgba(255, 85, 0, 0.35)'
-                        : featured
-                          ? '0 50px 90px -40px color-mix(in srgb, var(--color-volt) 55%, transparent)'
-                          : undefined,
+                        : '0 50px 90px -40px color-mix(in srgb, var(--color-volt) 55%, transparent)',
                     }}
                   >
-                    {featured && (
+                    {hasBadge && (
                       <span
                         className="absolute left-1/2 top-[-16px] -translate-x-1/2 whitespace-nowrap rounded-full px-[18px] py-[9px] text-xs font-bold uppercase tracking-[0.16em]"
-                        style={{ background: '#000000', color: 'var(--color-volt)', boxShadow: '0 0 0 4px #000000' }}
+                        style={{ background: '#000000', color: accent, boxShadow: '0 0 0 4px #000000' }}
                       >
-                        Más elegido
+                        {p.badgeLabel}
                       </span>
                     )}
 
@@ -988,7 +1021,7 @@ export default function Home() {
                       </p>
                     </div>
 
-                    <div className="flex min-h-[132px] flex-col gap-2">
+                    <div className="flex flex-col gap-2">
                       <div className="flex items-end gap-2.5">
                         <span className="font-display text-[60px] font-black leading-[0.9] sm:text-[80px]">
                           ${fmt(p.precio)}
@@ -1000,20 +1033,10 @@ export default function Home() {
                       <span className="kicker" style={{ color: mutedColor }}>
                         {meta.caption}
                       </span>
-                      {isElite && (
-                        <span className="text-sm font-bold">
-                          Equivale a ${fmt(Math.round(p.precio / 3))} por mes
-                        </span>
-                      )}
                     </div>
 
                     <div className="flex flex-col gap-6">
-                      <div
-                        className="h-px"
-                        style={{
-                          background: isElite ? 'rgba(0,0,0,0.22)' : featured ? 'rgba(0,0,0,0.24)' : '#C4BEB0',
-                        }}
-                      />
+                      <div className="h-px" style={{ background: dividerColor }} />
                       <ul className="flex flex-col gap-4 text-base font-medium leading-snug">
                         {p.beneficios.map((b, bi) => {
                           const special = bi === 0 && b.startsWith('Todo lo del')
@@ -1024,7 +1047,22 @@ export default function Home() {
                             </li>
                           )
                         })}
+                        {/* Ítems "no incluidos" — tachados y en gris para que quede claro qué queda afuera. */}
+                        {(p.noIncluye || []).map((b) => (
+                          <li key={`no-${b}`} className="flex items-center gap-3 text-black/40 line-through">
+                            <PlanCross color="currentColor" />
+                            <span>{b}</span>
+                          </li>
+                        ))}
                       </ul>
+                      {p.highlight && (
+                        <div
+                          className="rounded-xl px-4 py-3 text-sm leading-snug"
+                          style={{ background: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.78)' }}
+                        >
+                          {p.highlight}
+                        </div>
+                      )}
                     </div>
 
                     <Link
