@@ -111,6 +111,16 @@ export const api = {
     })
   },
 
+  // Login/registro con Google. `credential` es el ID token que Google devuelve
+  // al callback de <GoogleLogin />. El backend lo verifica y responde el mismo
+  // shape que /login (token + nombre + email + isAdmin).
+  loginWithGoogle(credential) {
+    return request('/api/auth/google', {
+      method: 'POST',
+      body: JSON.stringify({ credential }),
+    })
+  },
+
   me() {
     return request('/api/auth/me', { headers: authHeader() })
   },

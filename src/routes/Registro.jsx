@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 import { Input } from '../components/Field'
 import AuthAside from '../components/AuthAside'
+import GoogleLoginButton from '../components/GoogleLoginButton'
 import { useAuth } from '../features/auth/AuthContext'
 import { api } from '../lib/api'
 
@@ -72,6 +73,17 @@ export default function Registro() {
               {loading ? 'Creando cuenta…' : 'Crear mi cuenta'}
             </Button>
           </form>
+
+          {/* Separador "o" y signup con Google */}
+          <div className="mt-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-line" />
+            <span className="text-[11px] font-medium uppercase tracking-wider text-muted-2">o</span>
+            <div className="h-px flex-1 bg-line" />
+          </div>
+          <div className="mt-4 flex justify-center">
+            <GoogleLoginButton onError={(msg) => setError(msg)} text="signup_with" />
+          </div>
+
           <p className="mt-5 text-center text-sm text-muted">
             ¿Ya tenés cuenta?{' '}
             <Link to="/login" className="font-medium text-volt hover:underline">
