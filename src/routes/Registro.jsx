@@ -38,13 +38,13 @@ export default function Registro() {
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 lg:grid-cols-2 lg:items-center lg:py-20">
+    <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:gap-10 sm:px-5 sm:py-14 lg:grid-cols-2 lg:items-center lg:py-20">
       <div className="mx-auto w-full max-w-md">
         <h1 className="text-3xl font-extrabold uppercase text-white sm:text-4xl">Crear cuenta</h1>
-        <p className="mt-2 text-muted">Registrate para armar y recibir tu rutina personalizada.</p>
+        <p className="mt-2 text-sm text-muted sm:text-base">Registrate para armar y recibir tu rutina personalizada.</p>
 
-        <div className="mt-8 rounded-3xl border border-line bg-ink-2 p-6 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="mt-6 rounded-2xl border border-line bg-ink-2 p-5 sm:mt-8 sm:rounded-3xl sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <Input label="Nombre" value={form.nombre} onChange={set('nombre')} placeholder="Tu nombre" required />
             <Input label="Email" type="email" value={form.email} onChange={set('email')} placeholder="tu@email.com" required />
             <Input
@@ -69,7 +69,7 @@ export default function Registro() {
                 {error}
               </p>
             )}
-            <Button type="submit" size="lg" className="w-full" disabled={loading}>
+            <Button type="submit" size="lg" className="w-full justify-center" disabled={loading}>
               {loading ? 'Creando cuenta…' : 'Crear mi cuenta'}
             </Button>
           </form>

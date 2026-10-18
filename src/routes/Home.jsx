@@ -541,52 +541,58 @@ export default function Home() {
       <section className="relative overflow-hidden border-b border-line">
         <div className="grid-bg pointer-events-none absolute inset-0" />
         <div className="glow pointer-events-none absolute -right-40 -top-52 h-[36rem] w-[36rem]" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-12 lg:py-24">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-12 sm:px-5 sm:py-16 lg:grid-cols-12 lg:gap-12 lg:py-24">
           {/* Texto */}
           <div className="rise lg:col-span-7">
             <div className="inline-flex items-center gap-2.5">
               <span className="h-2 w-2 rounded-full bg-volt shadow-[0_0_12px_rgba(198,210,75,0.8)]" />
-              <span className="kicker text-white/80">Rutinas personalizadas · PDF con videos</span>
+              <span className="kicker text-[0.65rem] text-white/80 sm:text-[0.72rem]">Rutinas personalizadas · PDF con videos</span>
             </div>
-            <h1 className="mt-6 font-display text-[3.75rem] font-black uppercase leading-[0.86] text-white sm:text-[4.75rem] lg:text-[6.75rem] xl:text-[8.5rem]">
+            <h1 className="mt-5 font-display text-[2.65rem] font-black uppercase leading-[0.88] text-white xs:text-[3.2rem] sm:text-[4.75rem] sm:leading-[0.86] lg:text-[6.75rem] xl:text-[8.5rem]">
               Tu rutina de entrenamiento,
               <br />
               <span className="text-gradient">hecha para vos.</span>
             </h1>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-muted sm:mt-6 sm:text-lg">
               Contanos tus objetivos y tu cuerpo. Te armamos una rutina profesional, con videos y
               explicaciones, lista para descargar en PDF. Sin plantillas genéricas.
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-5">
-              <Button as="link" to="/pedido" size="lg">
+            <div className="mt-6 flex flex-wrap items-center gap-4 sm:mt-8 sm:gap-5">
+              <Button as="link" to="/pedido" size="lg" className="w-full justify-center xs:w-auto">
                 Pedir mi rutina <ArrowRight size={18} />
               </Button>
             </div>
 
-            <ul className="mt-8 flex flex-wrap gap-2.5">
-              {['Entrega en 24 h', 'Adaptada a lesiones', 'Pago seguro'].map((t) => (
-                <li
-                  key={t}
-                  className="flex items-center gap-2 rounded-full border border-line bg-white/[0.03] px-4 py-2 text-sm font-medium text-white/90"
-                >
-                  <Check size={15} className="text-volt" /> {t}
-                </li>
-              ))}
+            <ul className="mt-6 grid grid-cols-3 gap-2 sm:mt-8 sm:flex sm:flex-wrap sm:gap-2.5">
+              {['Entrega 24 h', 'Adaptada', 'Pago seguro'].map((t, i) => {
+                const full = ['Entrega en 24 h', 'Adaptada a lesiones', 'Pago seguro'][i]
+                return (
+                  <li
+                    key={t}
+                    className="flex items-center justify-center gap-1.5 rounded-full border border-line bg-white/[0.03] px-2.5 py-2 text-[0.72rem] font-medium text-white/90 sm:gap-2 sm:px-4 sm:text-sm"
+                  >
+                    <Check size={13} className="shrink-0 text-volt sm:hidden" />
+                    <Check size={15} className="hidden shrink-0 text-volt sm:block" />
+                    <span className="sm:hidden">{t}</span>
+                    <span className="hidden sm:inline">{full}</span>
+                  </li>
+                )
+              })}
             </ul>
 
           </div>
 
           {/* Ejemplo de rutina, sin foto de stock */}
           <div className="relative lg:col-span-5">
-            <div className="relative mx-auto flex aspect-[4/5] max-w-sm items-center justify-center">
+            <div className="relative mx-auto flex aspect-[4/5] w-full max-w-xs items-center justify-center sm:max-w-sm">
               {/* anillos decorativos tipo radar */}
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line" />
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[19rem] w-[19rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line" />
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[12rem] w-[12rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line" />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[20rem] w-[20rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line sm:h-[26rem] sm:w-[26rem]" />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[14rem] w-[14rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line sm:h-[19rem] sm:w-[19rem]" />
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[9rem] w-[9rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-line sm:h-[12rem] sm:w-[12rem]" />
               <div className="glow pointer-events-none absolute inset-0" />
 
               {/* card principal: hoja de rutina */}
-              <div className="relative w-80 -rotate-2 rounded-2xl border border-line-2 bg-paper p-6 pb-5 text-ink shadow-2xl animate-[float_6s_ease-in-out_infinite]">
+              <div className="relative w-[17rem] -rotate-2 rounded-2xl border border-line-2 bg-paper p-5 pb-4 text-ink shadow-2xl animate-[float_6s_ease-in-out_infinite] sm:w-80 sm:p-6 sm:pb-5">
                 <div className="kicker flex items-center justify-between text-ink-soft/70">
                   <span>Tu plan de hoy</span>
                   <span>PDF</span>
@@ -659,62 +665,65 @@ export default function Home() {
       {/* ===================== STATS STRIP ===================== */}
       <section className="relative overflow-hidden border-b border-line">
         <div className="grid-bg pointer-events-none absolute inset-0 opacity-60" />
-        <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 py-14 sm:grid-cols-3 lg:py-16">
+        <div className="relative mx-auto grid max-w-7xl grid-cols-3 gap-4 px-4 py-10 sm:gap-10 sm:px-5 sm:py-14 lg:py-16">
           <Reveal>
             <div className="text-center sm:text-left">
-              <p className="font-display text-6xl font-black leading-none text-white sm:text-7xl">
+              <p className="font-display text-3xl font-black leading-none text-white xs:text-4xl sm:text-7xl">
                 <span className="text-volt">+</span>500
               </p>
-              <p className="kicker mt-3 text-muted">Rutinas entregadas</p>
+              <p className="kicker mt-2 text-[0.6rem] text-muted sm:mt-3 sm:text-[0.72rem]">Rutinas</p>
             </div>
           </Reveal>
           <Reveal delay={80}>
             <div className="text-center">
-              <p className="flex items-center justify-center gap-3 font-display text-6xl font-black leading-none text-white sm:text-7xl">
-                4,9 <Star size={40} fill="currentColor" strokeWidth={0} className="text-volt" />
+              <p className="flex items-center justify-center gap-1 font-display text-3xl font-black leading-none text-white xs:text-4xl sm:gap-3 sm:text-7xl">
+                4,9 <Star size={18} fill="currentColor" strokeWidth={0} className="text-volt sm:hidden" />
+                <Star size={40} fill="currentColor" strokeWidth={0} className="hidden text-volt sm:block" />
               </p>
-              <p className="kicker mt-3 text-muted">Valoración media</p>
+              <p className="kicker mt-2 text-[0.6rem] text-muted sm:mt-3 sm:text-[0.72rem]">Valoración</p>
             </div>
           </Reveal>
           <Reveal delay={160}>
             <div className="text-center sm:text-right">
-              <p className="font-display text-6xl font-black leading-none text-white sm:text-7xl">
+              <p className="font-display text-3xl font-black leading-none text-white xs:text-4xl sm:text-7xl">
                 24<span className="text-volt">h</span>
               </p>
-              <p className="kicker mt-3 text-muted">De entrega</p>
+              <p className="kicker mt-2 text-[0.6rem] text-muted sm:mt-3 sm:text-[0.72rem]">Entrega</p>
             </div>
           </Reveal>
         </div>
       </section>
 
       {/* ===================== CÓMO FUNCIONA ===================== */}
-      <section id="como-funciona" className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+      <section id="como-funciona" className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:py-28">
         <Reveal>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4 sm:gap-5">
             <p className="kicker text-volt">Cómo funciona</p>
-            <h2 className="font-display text-5xl font-black uppercase leading-[0.88] text-white sm:text-7xl lg:text-[6.5rem]">
+            <h2 className="font-display text-[2.65rem] font-black uppercase leading-[0.9] text-white xs:text-[3.2rem] sm:text-7xl sm:leading-[0.88] lg:text-[6.5rem]">
               Tres pasos
               <br />
               y a entrenar.
             </h2>
           </div>
         </Reveal>
-        <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-6">
+        <div className="mt-10 grid gap-8 sm:mt-16 sm:gap-10 md:grid-cols-3 md:gap-6">
           {pasos.map((p, i) => (
             <Reveal key={p.n} delay={i * 100}>
-              <article className="flex flex-col items-center gap-5 border-t border-white/15 pt-8 text-center">
+              <article className="flex flex-row items-center gap-5 border-t border-white/15 pt-6 text-left sm:flex-col sm:items-center sm:gap-5 sm:pt-8 sm:text-center">
                 <div
-                  className="font-display text-[9rem] font-black leading-[0.8] text-transparent"
+                  className="font-display text-[5rem] font-black leading-[0.8] text-transparent sm:text-[9rem]"
                   style={{ WebkitTextStroke: '1.5px var(--color-volt)' }}
                 >
                   {p.n}
                 </div>
-                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] text-white sm:text-4xl">
-                  {p.titulo}
-                </h3>
-                <p className="mx-auto max-w-[22rem] text-lg leading-relaxed text-muted">
-                  {p.texto}
-                </p>
+                <div className="flex-1 sm:w-full">
+                  <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] text-white sm:text-4xl">
+                    {p.titulo}
+                  </h3>
+                  <p className="mx-auto mt-2 max-w-[22rem] text-sm leading-relaxed text-muted sm:mt-5 sm:text-lg">
+                    {p.texto}
+                  </p>
+                </div>
               </article>
             </Reveal>
           ))}
@@ -746,43 +755,45 @@ export default function Home() {
       </section>
 
       {/* ===================== BENEFICIOS ===================== */}
-      <section className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:py-28">
         <Reveal>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4 sm:gap-5">
             <p className="kicker text-volt">Qué incluye</p>
-            <h2 className="font-display text-5xl font-black uppercase leading-[0.88] text-white sm:text-7xl lg:text-[6.5rem]">
+            <h2 className="font-display text-[2.65rem] font-black uppercase leading-[0.9] text-white xs:text-[3.2rem] sm:text-7xl sm:leading-[0.88] lg:text-[6.5rem]">
               Lista para entrenar.
             </h2>
           </div>
         </Reveal>
-        <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-12">
+        <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 sm:gap-6 md:grid-cols-12">
           <Reveal className="md:col-span-7">
-            <article className="relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
-              <h3 className="font-display text-4xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
+            <article className="relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-6 text-paper sm:gap-5 sm:p-9">
+              <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
                 <span className="text-volt">Videos</span> en cada ejercicio
               </h3>
-              <p className="max-w-md text-base leading-relaxed text-paper/60">
+              <p className="max-w-md text-sm leading-relaxed text-paper/60 sm:text-base">
                 Mirás cómo se hace antes de hacerlo. Técnica y explicación, ejercicio por ejercicio.
               </p>
-              <div className="relative mt-2 flex min-h-[230px] flex-grow items-center justify-center overflow-hidden rounded-xl border border-line bg-ink">
-                <Dumbbell size={80} className="text-white/15" strokeWidth={1.5} />
-                <div className="absolute inset-x-5 bottom-4 flex items-center gap-3.5">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-volt">
-                    <Play size={14} className="translate-x-px fill-ink text-ink" />
+              <div className="relative mt-1 flex min-h-[180px] flex-grow items-center justify-center overflow-hidden rounded-xl border border-line bg-ink sm:mt-2 sm:min-h-[230px]">
+                <Dumbbell size={60} className="text-white/15 sm:hidden" strokeWidth={1.5} />
+                <Dumbbell size={80} className="hidden text-white/15 sm:block" strokeWidth={1.5} />
+                <div className="absolute inset-x-4 bottom-3 flex items-center gap-2.5 sm:inset-x-5 sm:bottom-4 sm:gap-3.5">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-volt sm:h-9 sm:w-9">
+                    <Play size={13} className="translate-x-px fill-ink text-ink sm:hidden" />
+                    <Play size={14} className="hidden translate-x-px fill-ink text-ink sm:block" />
                   </span>
                   <span className="relative h-1 flex-grow rounded-full bg-paper/15">
                     <span className="absolute inset-y-0 left-0 w-[38%] rounded-full bg-volt" />
                   </span>
-                  <span className="kicker text-paper/60">Sentadilla</span>
+                  <span className="kicker text-[0.65rem] text-paper/60 sm:text-[0.72rem]">Sentadilla</span>
                 </div>
               </div>
             </article>
           </Reveal>
 
           <Reveal delay={80} className="md:col-span-5">
-            <article className="relative flex h-full flex-col gap-7 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
-              <div aria-hidden="true" className="relative h-[262px]">
-                <div className="absolute left-1/2 top-1.5 h-[250px] w-[190px] -translate-x-1/2">
+            <article className="relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl border border-line bg-olive p-6 text-paper sm:gap-7 sm:p-9">
+              <div aria-hidden="true" className="relative h-[200px] sm:h-[262px]">
+                <div className="absolute left-1/2 top-1.5 h-[190px] w-[150px] -translate-x-1/2 sm:h-[250px] sm:w-[190px]">
                   <div className="absolute inset-0 -rotate-[9deg] rounded-xl bg-[#c4beb0]" />
                   <div className="absolute inset-0 -rotate-[4deg] rounded-xl bg-[#dad4c8]" />
                   <div className="absolute inset-0 flex rotate-[1deg] flex-col gap-3 rounded-xl bg-paper p-5">
@@ -801,13 +812,13 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3.5">
-                <h3 className="font-display text-4xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
+              <div className="flex flex-col gap-3 sm:gap-3.5">
+                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
                   <span className="text-volt">PDF</span> listo
                   <br />
                   para descargar
                 </h3>
-                <p className="max-w-sm text-base leading-relaxed text-paper/60">
+                <p className="max-w-sm text-sm leading-relaxed text-paper/60 sm:text-base">
                   Te llega en 24 h. Llevalo en el celular o imprimilo.
                 </p>
               </div>
@@ -815,15 +826,16 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={160} className="md:col-span-6">
-            <article className="flex h-full items-center gap-7 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
-              <span className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt">
-                <ShieldCheck size={34} strokeWidth={1.75} />
+            <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
+                <Dumbbell size={26} strokeWidth={1.75} className="sm:hidden" />
+                <ShieldCheck size={34} strokeWidth={1.75} className="hidden sm:block" />
               </span>
-              <div className="flex flex-col gap-3">
-                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+              <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
                   Adaptada a <span className="text-volt">lesiones</span>
                 </h3>
-                <p className="max-w-md text-[0.95rem] leading-relaxed text-paper/60">
+                <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
                   Contanos si tenés alguna lesión o molestia y tu rutina se arma teniéndola en cuenta.
                 </p>
               </div>
@@ -831,15 +843,16 @@ export default function Home() {
           </Reveal>
 
           <Reveal delay={240} className="md:col-span-6">
-            <article className="flex h-full items-center gap-7 overflow-hidden rounded-3xl border border-line bg-olive p-9 text-paper">
-              <span className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt">
-                <Dumbbell size={34} strokeWidth={1.75} />
+            <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
+              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
+                <Dumbbell size={26} strokeWidth={1.75} className="sm:hidden" />
+                <Dumbbell size={34} strokeWidth={1.75} className="hidden sm:block" />
               </span>
-              <div className="flex flex-col gap-3">
-                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+              <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
                   Sin <span className="text-volt">plantillas</span> genéricas
                 </h3>
-                <p className="max-w-md text-[0.95rem] leading-relaxed text-paper/60">
+                <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
                   Tu plan se arma a partir de tus objetivos, tu cuerpo y tu tiempo.
                 </p>
               </div>
@@ -850,14 +863,14 @@ export default function Home() {
 
       {/* ===================== NOSOTROS ===================== */}
       <section id="nosotros" className="border-y border-line bg-ink-2/40">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:py-28">
           <Reveal>
             <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
                 <p className="kicker mb-3 text-volt-deep">
                   <span className="mr-2">—</span>Nosotros
                 </p>
-                <h2 className="text-[2.75rem] font-extrabold uppercase leading-[0.88] text-white sm:text-[4rem] lg:text-[5.25rem]">
+                <h2 className="text-[2.4rem] font-extrabold uppercase leading-[0.9] text-white xs:text-[2.75rem] sm:text-[4rem] sm:leading-[0.88] lg:text-[5.25rem]">
                   Quién arma
                   <br />
                   tu rutina.
@@ -866,7 +879,7 @@ export default function Home() {
             </div>
           </Reveal>
 
-          <div className="mt-16 grid items-start gap-14 lg:grid-cols-12">
+          <div className="mt-10 grid items-start gap-10 sm:mt-16 sm:gap-14 lg:grid-cols-12">
             <Reveal className="lg:col-span-5">
               <TeamCard
                 src="/foto%20ceo1.jpeg"
@@ -876,29 +889,29 @@ export default function Home() {
             </Reveal>
 
             <Reveal delay={100} className="lg:col-span-7 lg:pl-8">
-              <p className="max-w-xl text-[1.7rem] font-semibold leading-[1.2] text-white sm:text-[2.15rem]">
+              <p className="max-w-xl text-[1.35rem] font-semibold leading-[1.25] text-white xs:text-[1.5rem] sm:text-[2.15rem] sm:leading-[1.2]">
                 Soy quien diseña <span className="text-volt">personalmente</span> cada rutina de
                 IMTRAINING.
               </p>
-              <p className="mt-5 max-w-lg text-lg leading-relaxed text-muted">
+              <p className="mt-4 max-w-lg text-base leading-relaxed text-muted sm:mt-5 sm:text-lg">
                 Analizo tus datos, tus objetivos y tus límites para armarte un plan hecho a tu
                 medida con la técnica correcta y el acompañamiento que necesitás para progresar
                 en serio.
               </p>
 
-              <div className="mt-10">
+              <div className="mt-8 sm:mt-10">
                 <p className="kicker text-volt-deep">Cómo trabajo</p>
                 <ol className="mt-4">
                   {comoTrabajo.map((p) => (
                     <li
                       key={p.n}
-                      className="grid grid-cols-[2.5rem_1fr] items-center gap-x-6 gap-y-1.5 border-t border-line py-5 last:border-b sm:grid-cols-[2.5rem_9rem_1fr]"
+                      className="grid grid-cols-[2rem_1fr] items-center gap-x-4 gap-y-1 border-t border-line py-4 last:border-b sm:grid-cols-[2.5rem_9rem_1fr] sm:gap-x-6 sm:gap-y-1.5 sm:py-5"
                     >
                       <span className="kicker text-volt-deep">{p.n}</span>
-                      <h3 className="font-display text-2xl font-extrabold uppercase text-white">
+                      <h3 className="font-display text-lg font-extrabold uppercase text-white sm:text-2xl">
                         {p.titulo}
                       </h3>
-                      <p className="col-span-2 text-[0.95rem] leading-relaxed text-muted sm:col-span-1">
+                      <p className="col-span-2 text-[0.88rem] leading-relaxed text-muted sm:col-span-1 sm:text-[0.95rem]">
                         {p.texto}
                       </p>
                     </li>
@@ -906,32 +919,33 @@ export default function Home() {
                 </ol>
               </div>
 
-              <div className="mt-10 grid grid-cols-1 gap-4 sm:max-w-xl sm:grid-cols-3">
-                <div className="rounded-2xl border border-line bg-olive p-5">
-                  <p className="font-display text-5xl font-black leading-none text-paper">
+              <div className="mt-8 grid grid-cols-3 gap-3 sm:mt-10 sm:max-w-xl sm:gap-4">
+                <div className="rounded-2xl border border-line bg-olive p-3 sm:p-5">
+                  <p className="font-display text-2xl font-black leading-none text-paper sm:text-5xl">
                     <span className="text-volt">+</span>500
                   </p>
-                  <p className="kicker mt-2.5 text-paper/60">Rutinas entregadas</p>
+                  <p className="kicker mt-2 text-[0.6rem] text-paper/60 sm:mt-2.5 sm:text-[0.72rem]">Rutinas</p>
                 </div>
-                <div className="rounded-2xl border border-line bg-olive p-5">
-                  <p className="flex items-center gap-2 font-display text-5xl font-black leading-none text-paper">
-                    4,9 <Star size={24} fill="currentColor" strokeWidth={0} className="text-volt" />
+                <div className="rounded-2xl border border-line bg-olive p-3 sm:p-5">
+                  <p className="flex items-center gap-1 font-display text-2xl font-black leading-none text-paper sm:gap-2 sm:text-5xl">
+                    4,9 <Star size={14} fill="currentColor" strokeWidth={0} className="text-volt sm:hidden" />
+                    <Star size={24} fill="currentColor" strokeWidth={0} className="hidden text-volt sm:block" />
                   </p>
-                  <p className="kicker mt-2.5 text-paper/60">Valoración media</p>
+                  <p className="kicker mt-2 text-[0.6rem] text-paper/60 sm:mt-2.5 sm:text-[0.72rem]">Valoración</p>
                 </div>
-                <div className="rounded-2xl border border-line bg-olive p-5">
-                  <p className="font-display text-5xl font-black leading-none text-paper">
+                <div className="rounded-2xl border border-line bg-olive p-3 sm:p-5">
+                  <p className="font-display text-2xl font-black leading-none text-paper sm:text-5xl">
                     <span className="text-volt">+</span>5
                   </p>
-                  <p className="kicker mt-2.5 text-paper/60">Años de experiencia</p>
+                  <p className="kicker mt-2 text-[0.6rem] text-paper/60 sm:mt-2.5 sm:text-[0.72rem]">Años exp.</p>
                 </div>
               </div>
 
-              <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-                <Button as="link" to="/pedido" size="lg">
+              <div className="mt-8 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3">
+                <Button as="link" to="/pedido" size="lg" className="justify-center">
                   Pedir mi rutina <ArrowRight size={18} />
                 </Button>
-                <Button as="link" to="/#precios" variant="ghost">
+                <Button as="link" to="/#precios" variant="ghost" className="justify-center">
                   Ver planes y precios <ArrowRight size={16} />
                 </Button>
               </div>
@@ -942,7 +956,7 @@ export default function Home() {
 
       {/* ===================== TESTIMONIOS ===================== */}
       <section className="overflow-hidden bg-ink-2/40">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:py-28">
           <Reveal>
             <SectionTitle center eyebrow="Reseñas de Google" title="Lo que dicen en Google." />
           </Reveal>
@@ -964,7 +978,7 @@ export default function Home() {
 
       {/* ===================== PLANES ===================== */}
       <section id="precios" className="border-y border-line bg-ink-2/50">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:py-28">
           <Reveal>
             <SectionTitle
               center
@@ -973,7 +987,7 @@ export default function Home() {
               subtitle="Sin letra chica. Elegí el plan que mejor se adapta a tu objetivo."
             />
           </Reveal>
-          <div className="mx-auto mt-14 grid max-w-5xl items-stretch gap-6 md:grid-cols-2">
+          <div className="mx-auto mt-10 grid max-w-5xl items-stretch gap-5 sm:mt-14 sm:gap-6 md:grid-cols-2">
             {plans.map((p, i) => {
               const meta = PLAN_META[p.id] || {}
               const isEmber = meta.accent === 'ember'
@@ -984,11 +998,11 @@ export default function Home() {
               const dividerColor = isEmber ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.22)'
               const hasBadge = Boolean(p.destacado && p.badgeLabel)
               return (
-                <Reveal key={p.id} delay={i * 80}>
-                  <article
-                    className={`relative flex h-full flex-col gap-7 rounded-[28px] p-9 pb-8 text-black ${
-                      hasBadge ? 'pt-[72px]' : ''
-                    }`}
+                <article
+                  key={p.id}
+                  className={`relative flex h-full flex-col gap-5 rounded-[24px] p-6 pb-6 text-black sm:gap-7 sm:rounded-[28px] sm:p-9 sm:pb-8 ${
+                    hasBadge ? 'pt-14 sm:pt-[72px]' : ''
+                  }`}
                     style={{
                       background: accent,
                       boxShadow: isEmber
@@ -1012,21 +1026,21 @@ export default function Home() {
                       <Barcode bars={meta.bars} color="#000000" />
                     </div>
 
-                    <div className="flex flex-col gap-3">
-                      <h3 className="font-display text-[42px] font-extrabold uppercase leading-[0.95] sm:text-[50px]">
+                    <div className="flex flex-col gap-2.5 sm:gap-3">
+                      <h3 className="font-display text-[34px] font-extrabold uppercase leading-[0.95] xs:text-[40px] sm:text-[50px]">
                         {p.nombre}
                       </h3>
-                      <p className="min-h-[48px] text-base leading-snug" style={{ color: mutedColor }}>
+                      <p className="min-h-[42px] text-sm leading-snug sm:min-h-[48px] sm:text-base" style={{ color: mutedColor }}>
                         {p.descripcion}
                       </p>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <div className="flex items-end gap-2.5">
-                        <span className="font-display text-[60px] font-black leading-[0.9] sm:text-[80px]">
+                      <div className="flex items-end gap-2 sm:gap-2.5">
+                        <span className="font-display text-[46px] font-black leading-[0.9] xs:text-[56px] sm:text-[80px]">
                           ${fmt(p.precio)}
                         </span>
-                        <span className="kicker pb-2" style={{ color: mutedColor }}>
+                        <span className="kicker pb-1.5 sm:pb-2" style={{ color: mutedColor }}>
                           {p.moneda}
                         </span>
                       </div>
@@ -1035,9 +1049,9 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-5 sm:gap-6">
                       <div className="h-px" style={{ background: dividerColor }} />
-                      <ul className="flex flex-col gap-4 text-base font-medium leading-snug">
+                      <ul className="flex flex-col gap-3 text-sm font-medium leading-snug sm:gap-4 sm:text-base">
                         {p.beneficios.map((b, bi) => {
                           const special = bi === 0 && b.startsWith('Todo lo del')
                           return (
@@ -1067,14 +1081,14 @@ export default function Home() {
 
                     <Link
                       to="/pedido"
-                      className="mt-auto flex h-[60px] items-center justify-center gap-3 rounded-[14px] text-[17px] font-bold transition-transform hover:-translate-y-0.5"
+                      className="mt-auto flex h-[52px] items-center justify-center gap-2.5 rounded-[12px] text-[15px] font-bold transition-transform hover:-translate-y-0.5 sm:h-[60px] sm:gap-3 sm:rounded-[14px] sm:text-[17px]"
                       style={{ background: '#000000', color: accent }}
                     >
                       Elegir {p.nombre}
-                      <ArrowRight size={20} />
-                    </Link>
-                  </article>
-                </Reveal>
+                      <ArrowRight size={18} className="sm:hidden" />
+                      <ArrowRight size={20} className="hidden sm:block" />
+                  </Link>
+                </article>
               )
             })}
           </div>
@@ -1085,11 +1099,11 @@ export default function Home() {
       </section>
 
       {/* ===================== FAQ ===================== */}
-      <section id="preguntas" className="mx-auto max-w-7xl px-5 py-20 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-12">
+      <section id="preguntas" className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:py-28">
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-4">
             <Reveal>
-              <div className="relative overflow-hidden rounded-3xl border border-line bg-olive p-8 text-paper">
+              <div className="relative overflow-hidden rounded-3xl border border-line bg-olive p-6 text-paper sm:p-8">
                 <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-paper/5" />
                 <div className="pointer-events-none absolute -left-20 -bottom-20 h-64 w-64 rounded-full border border-paper/5" />
 
@@ -1097,10 +1111,10 @@ export default function Home() {
                   <MessageCircle size={22} strokeWidth={2.2} />
                 </span>
 
-                <h2 className="relative mt-6 text-balance font-display text-4xl font-extrabold uppercase leading-[0.95] text-white sm:text-5xl">
+                <h2 className="relative mt-5 text-balance font-display text-3xl font-extrabold uppercase leading-[0.95] text-white xs:text-4xl sm:mt-6 sm:text-5xl">
                   ¿Te quedó otra duda?
                 </h2>
-                <p className="relative mt-4 text-paper/70">
+                <p className="relative mt-3 text-sm text-paper/70 sm:mt-4 sm:text-base">
                   Escribinos y te respondemos antes de que compres.
                 </p>
 
@@ -1241,8 +1255,8 @@ export default function Home() {
       </section>
 
       {/* ===================== CTA FINAL ===================== */}
-      <section id="pedir" className="mx-auto max-w-7xl px-5 py-20 lg:px-16 lg:py-28">
-        <div className="relative overflow-hidden rounded-[2rem] bg-volt text-ink">
+      <section id="pedir" className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 lg:px-16 lg:py-28">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-volt text-ink sm:rounded-[2rem]">
           {/* Decorative concentric circles */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2rem]">
             <svg
@@ -1267,40 +1281,48 @@ export default function Home() {
             </svg>
           </div>
 
-          <div className="relative grid grid-cols-1 gap-6 px-8 py-16 sm:px-14 sm:py-20 lg:grid-cols-12 lg:px-[72px] lg:py-[80px]">
-            <div className="flex flex-col items-start gap-6 lg:col-span-7">
-              <p className="kicker flex items-center gap-2.5 text-[13px] text-ink">
-                <Clock size={18} strokeWidth={2.2} /> Entrega en 24 horas
+          <div className="relative grid grid-cols-1 gap-5 px-6 py-12 sm:gap-6 sm:px-14 sm:py-20 lg:grid-cols-12 lg:px-[72px] lg:py-[80px]">
+            <div className="flex flex-col items-start gap-5 sm:gap-6 lg:col-span-7">
+              <p className="kicker flex items-center gap-2 text-[11px] text-ink sm:gap-2.5 sm:text-[13px]">
+                <Clock size={16} strokeWidth={2.2} className="sm:hidden" />
+                <Clock size={18} strokeWidth={2.2} className="hidden sm:block" /> Entrega en 24 horas
               </p>
 
-              <h2 className="font-display text-[3.75rem] font-black uppercase leading-[0.86] sm:text-[5.5rem] lg:text-[8rem]">
+              <h2 className="font-display text-[2.65rem] font-black uppercase leading-[0.9] xs:text-[3.2rem] sm:text-[5.5rem] sm:leading-[0.86] lg:text-[8rem]">
                 <span className="block">¿Listo para</span>
                 <span className="block">entrenar</span>
                 <span className="block">en serio?</span>
               </h2>
 
-              <p className="max-w-[500px] text-lg leading-relaxed text-ink sm:text-[21px]">
+              <p className="max-w-[500px] text-base leading-relaxed text-ink sm:text-[21px]">
                 Empezá hoy tu rutina personalizada y llevá tu entrenamiento al próximo nivel.
               </p>
 
-              <div className="mt-3 flex flex-col items-start gap-4">
+              <div className="mt-2 flex w-full flex-col items-stretch gap-4 sm:mt-3 sm:w-auto sm:items-start">
                 <Link
                   to="/pedido"
-                  className="group inline-flex h-16 items-center gap-3 rounded-[14px] bg-ink px-[34px] text-lg font-bold text-volt transition-transform hover:-translate-y-0.5"
+                  className="group inline-flex h-14 w-full items-center justify-center gap-3 rounded-[12px] bg-ink px-6 text-base font-bold text-volt transition-transform hover:-translate-y-0.5 sm:h-16 sm:w-auto sm:justify-start sm:rounded-[14px] sm:px-[34px] sm:text-lg"
                 >
                   Pedir mi rutina
                   <ArrowRight
+                    size={18}
+                    strokeWidth={2.4}
+                    className="transition-transform group-hover:translate-x-0.5 sm:hidden"
+                  />
+                  <ArrowRight
                     size={20}
                     strokeWidth={2.4}
-                    className="transition-transform group-hover:translate-x-0.5"
+                    className="hidden transition-transform group-hover:translate-x-0.5 sm:block"
                   />
                 </Link>
-                <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px] font-semibold text-ink">
+                <ul className="flex flex-col gap-2 text-[13px] font-semibold text-ink sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2 sm:text-[15px]">
                   <li className="flex items-center gap-2">
-                    <Check size={16} strokeWidth={2.6} /> Armá tu plan en menos de 2 minutos
+                    <Check size={14} strokeWidth={2.6} className="shrink-0 sm:hidden" />
+                    <Check size={16} strokeWidth={2.6} className="hidden shrink-0 sm:block" /> Armá tu plan en menos de 2 minutos
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={16} strokeWidth={2.6} /> Pago 100% seguro
+                    <Check size={14} strokeWidth={2.6} className="shrink-0 sm:hidden" />
+                    <Check size={16} strokeWidth={2.6} className="hidden shrink-0 sm:block" /> Pago 100% seguro
                   </li>
                 </ul>
               </div>

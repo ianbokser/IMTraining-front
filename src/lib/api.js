@@ -81,10 +81,23 @@ export const api = {
     return request('/api/payments/providers')
   },
 
-  checkout(orderId, provider = 'simulado') {
+  getPaymentChains() {
+    return request('/api/payments/chains')
+  },
+
+  // `opts` extra se pasa al provider (ej. { chainId, token } para MetaMask).
+  checkout(orderId, provider = 'simulado', opts = {}) {
     return request(`/api/orders/${orderId}/checkout`, {
       method: 'POST',
-      body: JSON.stringify({ provider }),
+      body: JSON.stringify({ provider, ...opts }),
+    })
+  },
+
+  // Para proveedores que confirman desde el cliente (ej. MetaMask manda el txHash).
+  confirmPayment(provider, body) {
+    return request(`/api/payments/confirm/${provider}`, {
+      method: 'POST',
+      body: JSON.stringify(body),
     })
   },
 

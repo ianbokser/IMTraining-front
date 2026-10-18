@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import {
   Check,
@@ -15,6 +15,7 @@ import {
 import Button from '../components/Button'
 import { useOrder } from '../features/order/OrderContext'
 import { api } from '../lib/api'
+import { PAYMENT_UI } from '../features/payments/registry'
 
 const fmt = (n) => new Intl.NumberFormat('es-AR').format(n)
 
@@ -24,11 +25,22 @@ export default function Checkout() {
   const [plans, setPlans] = useState([])
   const [providers, setProviders] = useState([])
   const [provider, setProvider] = useState('')
+  const [chains, setChains] = useState([])
+  const [chainId, setChainId] = useState(null)
+  const [cryptoToken, setCryptoToken] = useState('USDC')
+  const [walletResult, setWalletResult] = useState(null)
   const [paying, setPaying] = useState(false)
   const [done, setDone] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [paidOrderId, setPaidOrderId] = useState(null)
   const [error, setError] = useState('')
+
+  const selectedProvider = useMemo(
+    () => providers.find((p) => p.id === provider),
+    [providers, provider],
+  )
+  const isWalletProvider = selectedProvider?.tipo === 'wallet'
+  const WalletUI = isWalletProvider ? PAYMENT_UI[provider] : null
 
   const returnStatus = searchParams.get('status')
   const returnOrderId = searchParams.get('order')
@@ -47,8 +59,26 @@ export default function Checkout() {
         const firstAvail = list.find((p) => p.disponible) || list[0]
         setProvider(firstAvail?.id || 'simulado')
       })
-      .catch(() => setProviders([{ id: 'simulado', nombre: 'Pago de prueba', disponible: true }]))
+      .catch(() => setProviders([{ id: 'simulado', nombre: 'Pago de prueba', tipo: 'instant', disponible: true }]))
   }, [])
+
+  // Si hay algún provider de tipo wallet, cargamos las chains disponibles.
+  useEffect(() => {
+    if (!providers.some((p) => p.tipo === 'wallet' && p.disponible)) return
+    api
+      .getPaymentChains()
+      .then((list) => {
+        setChains(list)
+        if (list.length && chainId == null) setChainId(list[0].chainId)
+      })
+      .catch(() => setChains([]))
+  }, [providers, chainId])
+
+  // Al cambiar de proveedor limpiamos el resultado de wallet (si lo había).
+  useEffect(() => {
+    setWalletResult(null)
+    setError('')
+  }, [provider])
 
   // Retorno desde Mercado Pago: confirmamos el estado real del pedido (el webhook es la fuente de verdad).
   useEffect(() => {
@@ -90,11 +120,18 @@ export default function Checkout() {
     try {
       const created = order.id ? order : await api.createOrder(order)
       setCreatedOrder(created)
-      const res = await api.checkout(created.id, provider)
+      const opts = isWalletProvider ? { chainId, token: cryptoToken } : {}
+      const res = await api.checkout(created.id, provider, opts)
+
       if (res.type === 'redirect') {
         window.location.href = res.url
         return
       }
+      if (res.type === 'wallet') {
+        setWalletResult(res)
+        return
+      }
+      // type === 'done' (simulado)
       setPaidOrderId(created.id)
       setDone(true)
     } catch (e) {
@@ -102,6 +139,11 @@ export default function Checkout() {
     } finally {
       setPaying(false)
     }
+  }
+
+  const handleWalletConfirmed = (paidOrder) => {
+    setPaidOrderId(paidOrder?.id || createdOrder?.id)
+    setDone(true)
   }
 
   // Confirmando pago tras volver de Mercado Pago.
@@ -170,22 +212,22 @@ export default function Checkout() {
   if (!order.edad && !createdOrder && !returnOrderId) return <Navigate to="/pedido" replace />
 
   return (
-    <section className="mx-auto max-w-4xl px-5 py-14 lg:py-20">
+    <section className="mx-auto max-w-4xl px-4 py-10 sm:px-5 sm:py-14 lg:py-20">
       <p className="kicker text-volt-deep">
         <span className="mr-2">—</span> Último paso
       </p>
-      <h1 className="mt-4 text-4xl font-extrabold uppercase text-white sm:text-5xl">Confirmá tu pedido</h1>
-      <p className="mt-3 text-muted">Revisá que todo esté bien y confirmá tu compra.</p>
+      <h1 className="mt-3 text-3xl font-extrabold uppercase text-white xs:text-4xl sm:mt-4 sm:text-5xl">Confirmá tu pedido</h1>
+      <p className="mt-2 text-sm text-muted sm:mt-3 sm:text-base">Revisá que todo esté bien y confirmá tu compra.</p>
 
       {error && (
-        <p className="mt-6 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger">
+        <p className="mt-5 rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-sm text-danger sm:mt-6">
           {error}
         </p>
       )}
 
-      <div className="mt-10 grid gap-6 md:grid-cols-5">
+      <div className="mt-7 grid gap-5 sm:mt-10 sm:gap-6 md:grid-cols-5">
         {/* Resumen datos */}
-        <div className="rounded-3xl border border-line bg-ink-2 p-6 md:col-span-3 sm:p-8">
+        <div className="rounded-2xl border border-line bg-ink-2 p-5 sm:rounded-3xl sm:p-8 md:col-span-3">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-lg font-bold text-white">Tus datos</h2>
             <Link
@@ -195,7 +237,7 @@ export default function Checkout() {
               <Pencil size={14} /> Editar
             </Link>
           </div>
-          <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
+          <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3.5 text-sm sm:mt-5 sm:gap-x-4 sm:gap-y-4">
             <Item k="Edad" v={`${order.edad} años`} />
             <Item k="Peso" v={`${order.peso} kg`} />
             <Item k="Altura" v={`${order.altura} cm`} />
@@ -212,11 +254,11 @@ export default function Checkout() {
         {/* Resumen pago */}
         {plan && (
           <div className="h-fit space-y-4 md:col-span-2">
-            <div className="rounded-3xl border border-volt bg-volt p-6 text-ink shadow-glow sm:p-8">
+            <div className="rounded-2xl border border-volt bg-volt p-5 text-ink shadow-glow sm:rounded-3xl sm:p-8">
               <span className="kicker text-ink/60">{plan.nombre}</span>
-              <p className="mt-2 font-display text-4xl font-extrabold">
+              <p className="mt-2 font-display text-3xl font-extrabold sm:text-4xl">
                 ${fmt(plan.precio)}
-                <span className="text-base font-normal text-ink/60"> {plan.moneda}</span>
+                <span className="text-sm font-normal text-ink/60 sm:text-base"> {plan.moneda}</span>
               </p>
               <ul className="mt-5 space-y-2.5 text-sm">
                 {plan.beneficios.map((b) => (
@@ -252,17 +294,60 @@ export default function Checkout() {
                 </div>
               </div>
 
-              <Button variant="dark" size="lg" className="mt-6 w-full" onClick={handlePay} disabled={paying || !provider}>
-                {paying ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" /> Procesando…
-                  </>
-                ) : (
-                  <>
-                    <Lock size={18} /> Pagar ${fmt(plan.precio)}
-                  </>
-                )}
-              </Button>
+              {isWalletProvider && !walletResult && chains.length > 0 && (
+                <div className="mt-5 space-y-3">
+                  <div>
+                    <span className="kicker text-ink/60">Red</span>
+                    <select
+                      value={chainId ?? ''}
+                      onChange={(e) => setChainId(Number(e.target.value))}
+                      className="mt-1.5 w-full rounded-xl border border-ink/20 bg-ink/5 px-3 py-2.5 text-sm font-medium text-ink"
+                    >
+                      {chains.map((c) => (
+                        <option key={c.chainId} value={c.chainId}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <span className="kicker text-ink/60">Token</span>
+                    <select
+                      value={cryptoToken}
+                      onChange={(e) => setCryptoToken(e.target.value)}
+                      className="mt-1.5 w-full rounded-xl border border-ink/20 bg-ink/5 px-3 py-2.5 text-sm font-medium text-ink"
+                    >
+                      {(chains.find((c) => c.chainId === chainId)?.tokens || []).map((t) => (
+                        <option key={t.symbol} value={t.symbol}>
+                          {t.symbol}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {walletResult && WalletUI ? (
+                <WalletUI walletResult={walletResult} onConfirmed={handleWalletConfirmed} />
+              ) : (
+                <Button
+                  variant="dark"
+                  size="lg"
+                  className="mt-6 w-full justify-center"
+                  onClick={handlePay}
+                  disabled={paying || !provider || (isWalletProvider && !chainId)}
+                >
+                  {paying ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" /> Procesando…
+                    </>
+                  ) : (
+                    <>
+                      <Lock size={18} /> Pagar ${fmt(plan.precio)}
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
 
             <div className="rounded-2xl border border-line bg-ink-2 p-4">

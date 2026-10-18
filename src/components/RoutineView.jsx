@@ -28,9 +28,9 @@ export default function RoutineView({ routine, logs, onLogWeight }) {
 
   return (
     <div>
-      <div className="mb-8 rounded-2xl border border-line bg-ink-2 p-4">
-        <label className="kicker mb-3 block text-volt-deep">Elegí el día</label>
-        <div className="flex flex-wrap gap-2">
+      <div className="mb-6 rounded-2xl border border-line bg-ink-2 p-3 sm:mb-8 sm:p-4">
+        <label className="kicker mb-2.5 block text-volt-deep sm:mb-3">Elegí el día</label>
+        <div className="-mx-3 flex gap-2 overflow-x-auto px-3 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
           {options.map((opt) => {
             const active = opt.idx === safeIdx
             return (
@@ -38,7 +38,7 @@ export default function RoutineView({ routine, logs, onLogWeight }) {
                 key={opt.idx}
                 type="button"
                 onClick={() => setSelectedIdx(opt.idx)}
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-semibold transition-colors sm:px-4 ${
                   active
                     ? 'border-volt bg-volt text-ink'
                     : 'border-line bg-ink text-white/80 hover:border-line-strong'
@@ -52,48 +52,37 @@ export default function RoutineView({ routine, logs, onLogWeight }) {
             )
           })}
         </div>
-        <select
-          value={safeIdx}
-          onChange={(e) => setSelectedIdx(Number(e.target.value))}
-          className="mt-3 w-full rounded-lg border border-line bg-ink px-3 py-2 text-sm text-white outline-none focus:border-volt sm:hidden"
-        >
-          {options.map((opt) => (
-            <option key={opt.idx} value={opt.idx}>
-              {`${String(opt.idx + 1).padStart(2, '0')} · ${opt.label}`}
-            </option>
-          ))}
-        </select>
       </div>
 
       <div>
-        <div className="mb-6 flex items-baseline gap-4 border-b border-line pb-4">
-          <span className="numeral text-4xl text-volt">{String(safeIdx + 1).padStart(2, '0')}</span>
-          <h3 className="font-display text-2xl font-extrabold uppercase text-white">{dia.dia}</h3>
+        <div className="mb-5 flex items-baseline gap-3 border-b border-line pb-3 sm:mb-6 sm:gap-4 sm:pb-4">
+          <span className="numeral text-3xl text-volt sm:text-4xl">{String(safeIdx + 1).padStart(2, '0')}</span>
+          <h3 className="font-display text-xl font-extrabold uppercase text-white sm:text-2xl">{dia.dia}</h3>
         </div>
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {(dia.bloques || []).map((bloque, bi) => (
             <div key={`${bloque.bloque}-${bi}`}>
               {bloque.bloque && (
-                <div className="mb-4 flex items-center gap-3">
+                <div className="mb-3 flex items-center gap-3 sm:mb-4">
                   <span className="h-4 w-1 rounded-full bg-volt" />
                   <h4 className="font-display text-sm font-bold uppercase tracking-wide text-volt">
                     {bloque.bloque}
                   </h4>
                 </div>
               )}
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
                 {bloque.ejercicios.map((ej, j) => (
                   <Reveal
                     as="article"
                     key={`${ej.nombre}-${j}`}
                     delay={j * 60}
-                    className="surface surface-hover flex flex-col p-6"
+                    className="surface surface-hover flex flex-col p-4 sm:p-6"
                   >
-                    <h4 className="font-display text-lg font-bold text-white">{ej.nombre}</h4>
+                    <h4 className="font-display text-base font-bold text-white sm:text-lg">{ej.nombre}</h4>
                     {ej.explicacion && (
                       <p className="mt-1.5 text-sm leading-relaxed text-muted">{ej.explicacion}</p>
                     )}
-                    <div className="mt-5 flex flex-wrap gap-2 text-xs">
+                    <div className="mt-4 flex flex-wrap gap-1.5 text-xs sm:mt-5 sm:gap-2">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1 text-white/80">
                         <Layers size={13} className="text-volt" /> {ej.series} series
                       </span>

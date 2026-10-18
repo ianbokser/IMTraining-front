@@ -58,28 +58,28 @@ export default function PedidoRutina() {
   const selectedPlan = plans.find((p) => p.nombre === order.plan) || null
 
   return (
-    <section className="mx-auto max-w-3xl px-5 py-14 lg:py-20">
+    <section className="mx-auto max-w-3xl px-4 py-10 sm:px-5 sm:py-14 lg:py-20">
       <p className="kicker text-volt-deep">
         <span className="mr-2">—</span> Armá tu plan
       </p>
-      <h1 className="mt-4 text-4xl font-extrabold uppercase text-white sm:text-5xl">Pedí tu rutina</h1>
-      <p className="mt-3 max-w-lg text-lg text-muted">
+      <h1 className="mt-3 text-3xl font-extrabold uppercase text-white xs:text-4xl sm:mt-4 sm:text-5xl">Pedí tu rutina</h1>
+      <p className="mt-2 max-w-lg text-sm text-muted sm:mt-3 sm:text-lg">
         Contanos de vos para armar tu plan personalizado. Toma menos de dos minutos.
       </p>
 
-      <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
-        <span className="flex items-center gap-1.5"><Clock size={15} className="text-volt" /> 2 minutos</span>
-        <span className="flex items-center gap-1.5"><ShieldCheck size={15} className="text-volt" /> Sin compromiso hasta pagar</span>
-        <span className="flex items-center gap-1.5"><Lock size={15} className="text-volt" /> Datos privados</span>
+      <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted sm:mt-6 sm:gap-x-5 sm:gap-y-2 sm:text-sm">
+        <span className="flex items-center gap-1.5"><Clock size={14} className="text-volt" /> 2 minutos</span>
+        <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-volt" /> Sin compromiso</span>
+        <span className="flex items-center gap-1.5"><Lock size={14} className="text-volt" /> Datos privados</span>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-7 sm:mt-10">
         <Stepper steps={steps} current={step} />
       </div>
 
-      <div className="mt-8 rounded-3xl border border-line bg-ink-2 p-6 sm:p-8">
+      <div className="mt-6 rounded-2xl border border-line bg-ink-2 p-5 sm:mt-8 sm:rounded-3xl sm:p-8">
         {step === 0 && (
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-4 sm:gap-5 sm:grid-cols-2">
             <Input label="Edad" required type="number" min="12" max="99" value={order.edad} onChange={set('edad')} placeholder="28" error={errors.edad} />
             <Input label="Peso (kg)" required type="number" value={order.peso} onChange={set('peso')} placeholder="70" error={errors.peso} />
             <Input label="Altura (cm)" required type="number" value={order.altura} onChange={set('altura')} placeholder="175" error={errors.altura} />
@@ -102,7 +102,7 @@ export default function PedidoRutina() {
         )}
 
         {step === 1 && (
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-4 sm:gap-5 sm:grid-cols-2">
             <Select label="Días por semana" value={order.diasPorSemana} onChange={set('diasPorSemana')} options={['2', '3', '4', '5', '6']} />
             <Select label="Enfoque" value={order.enfoque} onChange={set('enfoque')} options={['Fuerza', 'Hipertrofia', 'Pérdida de grasa', 'Resistencia', 'Pliometría']} />
             <Select label="Experiencia" value={order.intensidad} onChange={set('intensidad')} options={['Principiante', 'Intermedio', 'Avanzado']} />
@@ -119,7 +119,7 @@ export default function PedidoRutina() {
         )}
 
         {step === 2 && (
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 sm:grid-cols-3">
             {plans.map((p) => {
               const active = order.plan === p.nombre
               return (
@@ -161,11 +161,11 @@ export default function PedidoRutina() {
           </div>
         )}
 
-        <div className="mt-8 flex items-center justify-between gap-4 border-t border-line pt-6">
-          <Button variant="ghost" onClick={back} disabled={step === 0}>
-            <ArrowLeft size={18} /> Atrás
+        <div className="mt-7 flex items-center justify-between gap-3 border-t border-line pt-5 sm:mt-8 sm:pt-6">
+          <Button variant="ghost" onClick={back} disabled={step === 0} className="shrink-0">
+            <ArrowLeft size={18} /> <span className="hidden xs:inline">Atrás</span>
           </Button>
-          <Button onClick={next}>
+          <Button onClick={next} className="flex-1 justify-center sm:flex-none">
             {step === steps.length - 1
               ? selectedPlan
                 ? `Ir a pagar · $${fmt(selectedPlan.precio)}`

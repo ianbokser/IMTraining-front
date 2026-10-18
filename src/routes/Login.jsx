@@ -45,18 +45,18 @@ export default function Login() {
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 lg:grid-cols-2 lg:items-center lg:py-20">
+    <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:gap-10 sm:px-5 sm:py-14 lg:grid-cols-2 lg:items-center lg:py-20">
       <div className="mx-auto w-full max-w-md">
         <p className="kicker mb-3 text-volt-deep">
           <span className="mr-2">—</span>
           Acceso clientes
         </p>
-        <h1 className="font-display text-5xl font-black uppercase leading-[0.92] text-white sm:text-6xl">
+        <h1 className="font-display text-4xl font-black uppercase leading-[0.92] text-white xs:text-5xl sm:text-6xl">
           Iniciar <span className="text-gradient">sesión.</span>
         </h1>
-        <p className="mt-3 text-muted">Ingresá para pedir y descargar tu rutina personalizada.</p>
+        <p className="mt-2 text-sm text-muted sm:mt-3 sm:text-base">Ingresá para pedir y descargar tu rutina personalizada.</p>
 
-        <div className="relative mt-8 overflow-hidden rounded-3xl border border-line bg-ink-2 p-6 sm:p-8">
+        <div className="relative mt-6 overflow-hidden rounded-2xl border border-line bg-ink-2 p-5 sm:mt-8 sm:rounded-3xl sm:p-8">
           <div className="glow pointer-events-none absolute -right-20 -top-20 h-64 w-64" />
           <form onSubmit={handleSubmit} className="relative space-y-5">
             <Input
@@ -88,7 +88,7 @@ export default function Login() {
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>
-            <Button type="submit" size="lg" className="w-full" disabled={loading}>
+            <Button type="submit" size="lg" className="w-full justify-center" disabled={loading}>
               {loading ? 'Ingresando…' : 'Ingresar'}
             </Button>
           </form>

@@ -14,28 +14,28 @@ export default function Footer() {
       />
       {/* Banda CTA — con margen propio arriba para que no se pise con el contenido
           del route anterior (login, registro, reset, etc.) */}
-      <div className="relative mx-auto max-w-7xl px-5 pt-16 sm:pt-20">
-        <div className="surface relative overflow-hidden p-8 sm:p-12">
+      <div className="relative mx-auto max-w-7xl px-4 pt-12 sm:px-5 sm:pt-20">
+        <div className="surface relative overflow-hidden p-6 sm:p-12">
           <div className="glow pointer-events-none absolute -right-20 -top-20 h-72 w-72" />
-          <div className="relative flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+          <div className="relative flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-center">
             <div>
-              <h3 className="text-2xl font-extrabold text-white sm:text-3xl">
+              <h3 className="text-xl font-extrabold text-white sm:text-3xl">
                 Tu próxima rutina te está esperando.
               </h3>
-              <p className="mt-2 text-muted">Armá tu plan personalizado en menos de 2 minutos.</p>
+              <p className="mt-2 text-sm text-muted sm:text-base">Armá tu plan personalizado en menos de 2 minutos.</p>
             </div>
-            <Button as="link" to="/pedido" size="lg" className="shrink-0">
+            <Button as="link" to="/pedido" size="lg" className="w-full justify-center shrink-0 sm:w-auto">
               Pedir mi rutina <ArrowUpRight size={18} />
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-5 pb-12 pt-16">
-        <div className="grid gap-10 md:grid-cols-[1.6fr_1fr_1fr]">
-          <div>
+      <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-12 sm:px-5 sm:pb-12 sm:pt-16">
+        <div className="grid gap-8 xs:grid-cols-2 sm:gap-10 md:grid-cols-[1.6fr_1fr_1fr]">
+          <div className="xs:col-span-2 md:col-span-1">
             <Logo />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted sm:mt-4">
               Rutinas de gimnasio hechas a tu medida. Entrená con un plan pensado para tu cuerpo,
               tus objetivos y tu tiempo.
             </p>

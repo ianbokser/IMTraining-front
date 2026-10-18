@@ -8,6 +8,9 @@
    tipografía grande y de alto contraste. Moderno, deportivo, vendedor.
 =================================================================== */
 @theme {
+  /* --- breakpoints adicionales (base sm:640, md:768, lg:1024, xl:1280) --- */
+  --breakpoint-xs: 28rem; /* 448px — habilita 2 columnas en phones medianos/grandes */
+
   /* --- superficies oscuras (negro profundo) --- */
   --color-ink: #000000;
   --color-ink-2: #0c0c0c;

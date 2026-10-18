@@ -85,23 +85,23 @@ export default function AdminPanel() {
   const selectedUserOrders = selectedUser ? ordersByUser.get(selectedUser.id) || [] : []
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-12">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-5 sm:py-12">
       {/* Header */}
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
-        <div>
+      <div className="mb-6 flex flex-col gap-3 border-b border-line pb-5 sm:mb-8 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-4 sm:pb-6">
+        <div className="min-w-0">
           <p className="kicker text-volt-deep">
             <span className="mr-2">—</span> Panel interno
           </p>
-          <h1 className="mt-3 text-3xl font-extrabold uppercase text-white">Administración</h1>
-          <p className="mt-1 text-muted">Hola, {auth?.nombre || 'Admin'}.</p>
+          <h1 className="mt-2 text-2xl font-extrabold uppercase text-white sm:mt-3 sm:text-3xl">Administración</h1>
+          <p className="mt-1 text-sm text-muted sm:text-base">Hola, {auth?.nombre || 'Admin'}.</p>
         </div>
-        <Button variant="outline" size="sm" onClick={logout}>
+        <Button variant="outline" size="sm" onClick={logout} className="self-start sm:self-auto">
           <LogOut size={16} /> Cerrar sesión
         </Button>
       </div>
 
-      {/* Stats */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Stats — 2x2 en mobile */}
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:mb-8 sm:gap-4 lg:grid-cols-4">
         <Stat label="Personas" value={stats.personas} icon={Users} />
         <Stat label="Pedidos" value={stats.pedidos} icon={ClipboardList} />
         <Stat label="Pagados" value={stats.pagados} icon={CheckCircle2} tone="ok" />
@@ -109,17 +109,19 @@ export default function AdminPanel() {
       </div>
 
       {/* Tabs + búsqueda */}
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-1 rounded-xl border border-line bg-ink-2 p-1">
-          <TabButton active={tab === 'personas'} onClick={() => setTab('personas')} icon={Users}>
-            Personas
-          </TabButton>
-          <TabButton active={tab === 'pedidos'} onClick={() => setTab('pedidos')} icon={ClipboardList}>
-            Pedidos
-          </TabButton>
-          <TabButton active={tab === 'ejercicios'} onClick={() => setTab('ejercicios')} icon={Dumbbell}>
-            Ejercicios
-          </TabButton>
+      <div className="mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="-mx-4 flex overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          <div className="flex gap-1 rounded-xl border border-line bg-ink-2 p-1">
+            <TabButton active={tab === 'personas'} onClick={() => setTab('personas')} icon={Users}>
+              Personas
+            </TabButton>
+            <TabButton active={tab === 'pedidos'} onClick={() => setTab('pedidos')} icon={ClipboardList}>
+              Pedidos
+            </TabButton>
+            <TabButton active={tab === 'ejercicios'} onClick={() => setTab('ejercicios')} icon={Dumbbell}>
+              Ejercicios
+            </TabButton>
+          </div>
         </div>
         <div className="relative sm:w-64">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
@@ -217,7 +219,7 @@ function PersonasView({ users, ordersByUser, selectedUser, selectedUserOrders, o
 
       <div className="lg:col-span-2">
         {selectedUser ? (
-          <div className="sticky top-24 space-y-4">
+          <div className="space-y-4 lg:sticky lg:top-24">
             <div className="surface p-6">
               <h3 className="font-display text-lg font-bold text-white">{selectedUser.nombre}</h3>
               <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
@@ -280,7 +282,7 @@ function PedidosView({ orders, selected, onSelect }) {
       </div>
       <div className="lg:col-span-2">
         {selected ? (
-          <div className="sticky top-24">
+          <div className="lg:sticky lg:top-24">
             <OrderCard order={selected} expanded />
           </div>
         ) : (
@@ -339,7 +341,7 @@ function TabButton({ active, onClick, icon: Icon, children }) {
   return (
     <button
       onClick={onClick}
-      className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors ${
+      className={`flex shrink-0 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors sm:flex-1 sm:px-4 ${
         active ? 'bg-volt text-ink' : 'text-white/60 hover:text-white'
       }`}
     >
@@ -363,13 +365,14 @@ function Stat({ label, value, icon: Icon, tone = 'volt' }) {
     warn: 'text-warn bg-warn/10',
   }
   return (
-    <div className="surface flex items-center justify-between p-6">
-      <div>
-        <p className="kicker text-muted">{label}</p>
-        <p className="numeral mt-2 text-4xl text-white">{value}</p>
+    <div className="surface flex items-center justify-between gap-3 p-4 sm:p-6">
+      <div className="min-w-0">
+        <p className="kicker text-[0.6rem] text-muted sm:text-[0.72rem]">{label}</p>
+        <p className="numeral mt-1.5 text-2xl text-white sm:mt-2 sm:text-4xl">{value}</p>
       </div>
-      <span className={`grid h-11 w-11 place-items-center rounded-xl ${colors[tone]}`}>
-        <Icon size={22} />
+      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl sm:h-11 sm:w-11 ${colors[tone]}`}>
+        <Icon size={18} className="sm:hidden" />
+        <Icon size={22} className="hidden sm:block" />
       </span>
     </div>
   )

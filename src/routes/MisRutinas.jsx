@@ -66,13 +66,13 @@ export default function MisRutinas() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-12 lg:py-16">
-      <div className="mb-8 border-b border-line pb-6">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-5 sm:py-12 lg:py-16">
+      <div className="mb-6 border-b border-line pb-5 sm:mb-8 sm:pb-6">
         <p className="kicker text-volt-deep">
           <span className="mr-2">—</span> Tu espacio
         </p>
-        <h1 className="mt-3 text-3xl font-extrabold uppercase text-white">Mis rutinas</h1>
-        <p className="mt-1 text-muted">Acá vas a ver las rutinas que armamos para vos, con sus videos.</p>
+        <h1 className="mt-3 text-2xl font-extrabold uppercase text-white sm:text-3xl">Mis rutinas</h1>
+        <p className="mt-1 text-sm text-muted sm:text-base">Acá vas a ver las rutinas que armamos para vos, con sus videos.</p>
       </div>
 
       {error && (
@@ -82,44 +82,47 @@ export default function MisRutinas() {
       )}
 
       {orders.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line bg-ink-2 p-12 text-center">
+        <div className="rounded-2xl border border-dashed border-line bg-ink-2 p-8 text-center sm:p-12">
           <Dumbbell size={32} className="mx-auto text-muted-2" />
-          <p className="mt-4 text-muted">Todavía no tenés pedidos. Pedí tu rutina para empezar.</p>
+          <p className="mt-4 text-sm text-muted sm:text-base">Todavía no tenés pedidos. Pedí tu rutina para empezar.</p>
           <Button as="link" to="/pedido" className="mt-6">
             Pedir mi rutina <ArrowRight size={18} />
           </Button>
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-4">
-          {/* Listado de pedidos */}
-          <div className="space-y-3 lg:col-span-1">
-            {orders.map((o) => {
-              const active = selected?.id === o.id
-              return (
-                <button
-                  key={o.id}
-                  onClick={() => openOrder(o)}
-                  className={`w-full rounded-2xl border p-4 text-left transition-colors ${
-                    active ? 'border-volt bg-volt/5' : 'border-line bg-ink-2 hover:border-line-strong'
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-display font-bold text-white">{o.plan}</span>
-                    <ChevronRight size={16} className={active ? 'text-volt' : 'text-muted-2'} />
-                  </div>
-                  <div className="mt-1.5 flex items-center gap-2 text-xs text-muted">
-                    <CalendarDays size={13} /> {o.fecha}
-                  </div>
-                  <div className="mt-3">
-                    {o.tieneRutina ? (
-                      <Badge tone="ok">Rutina lista</Badge>
-                    ) : (
-                      <Badge tone="warn">En preparación</Badge>
-                    )}
-                  </div>
-                </button>
-              )
-            })}
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-4">
+          {/* Listado de pedidos — scroll horizontal en mobile, columna en desktop */}
+          <div className="lg:col-span-1">
+            <p className="kicker mb-3 text-muted lg:hidden">Tus pedidos ({orders.length})</p>
+            <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 lg:mx-0 lg:flex-col lg:space-y-3 lg:overflow-visible lg:px-0 lg:pb-0">
+              {orders.map((o) => {
+                const active = selected?.id === o.id
+                return (
+                  <button
+                    key={o.id}
+                    onClick={() => openOrder(o)}
+                    className={`w-[16rem] shrink-0 rounded-2xl border p-4 text-left transition-colors lg:w-full ${
+                      active ? 'border-volt bg-volt/5' : 'border-line bg-ink-2 hover:border-line-strong'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate font-display font-bold text-white">{o.plan}</span>
+                      <ChevronRight size={16} className={`shrink-0 ${active ? 'text-volt' : 'text-muted-2'}`} />
+                    </div>
+                    <div className="mt-1.5 flex items-center gap-2 text-xs text-muted">
+                      <CalendarDays size={13} /> {o.fecha}
+                    </div>
+                    <div className="mt-3">
+                      {o.tieneRutina ? (
+                        <Badge tone="ok">Rutina lista</Badge>
+                      ) : (
+                        <Badge tone="warn">En preparación</Badge>
+                      )}
+                    </div>
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           {/* Detalle de la rutina seleccionada */}
@@ -135,12 +138,12 @@ export default function MisRutinas() {
               <div className="h-96 animate-pulse rounded-2xl bg-ink-2" />
             ) : routine ? (
               <div>
-                <div className="mb-6 flex flex-wrap items-end justify-between gap-4 rounded-2xl border border-line bg-ink-2 p-6">
-                  <div>
-                    <h2 className="font-display text-2xl font-extrabold uppercase text-white">
+                <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-line bg-ink-2 p-5 sm:mb-6 sm:flex-row sm:items-end sm:justify-between sm:p-6">
+                  <div className="min-w-0 flex-1">
+                    <h2 className="font-display text-xl font-extrabold uppercase text-white sm:text-2xl">
                       {routine.nombre}
                     </h2>
-                    {routine.descripcion && <p className="mt-1 text-muted">{routine.descripcion}</p>}
+                    {routine.descripcion && <p className="mt-1 text-sm text-muted">{routine.descripcion}</p>}
                     <div className="mt-3 flex flex-wrap gap-2">
                       {routine.nivel && <Badge tone="muted">{routine.nivel}</Badge>}
                       {routine.enfoque && <Badge tone="muted">{routine.enfoque}</Badge>}
@@ -151,6 +154,7 @@ export default function MisRutinas() {
                   </div>
                   <Button
                     variant="outline"
+                    className="w-full justify-center sm:w-auto"
                     onClick={() => {
                       const url = api.orderPdfUrl(selected.id)
                       if (url) window.open(url, '_blank')
