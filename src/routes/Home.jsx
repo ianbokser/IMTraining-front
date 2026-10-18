@@ -987,7 +987,7 @@ export default function Home() {
               subtitle="Sin letra chica. Elegí el plan que mejor se adapta a tu objetivo."
             />
           </Reveal>
-          <div className="mx-auto mt-10 grid max-w-5xl items-stretch gap-5 sm:mt-14 sm:gap-6 md:grid-cols-2">
+          <div className="mx-auto mt-10 grid max-w-5xl grid-cols-2 items-stretch gap-3 sm:mt-14 sm:gap-6">
             {plans.map((p, i) => {
               const meta = PLAN_META[p.id] || {}
               const isEmber = meta.accent === 'ember'
@@ -1000,8 +1000,8 @@ export default function Home() {
               return (
                 <article
                   key={p.id}
-                  className={`relative flex h-full flex-col gap-5 rounded-[24px] p-6 pb-6 text-black sm:gap-7 sm:rounded-[28px] sm:p-9 sm:pb-8 ${
-                    hasBadge ? 'pt-14 sm:pt-[72px]' : ''
+                  className={`relative flex h-full flex-col gap-3.5 rounded-[18px] p-3.5 text-black xs:gap-4 xs:rounded-[22px] xs:p-5 sm:gap-7 sm:rounded-[28px] sm:p-9 sm:pb-8 ${
+                    hasBadge ? 'pt-10 xs:pt-12 sm:pt-[72px]' : ''
                   }`}
                     style={{
                       background: accent,
@@ -1010,83 +1010,83 @@ export default function Home() {
                         : '0 50px 90px -40px color-mix(in srgb, var(--color-volt) 55%, transparent)',
                     }}
                   >
-                    {hasBadge && (
-                      <span
-                        className="absolute left-1/2 top-[-16px] -translate-x-1/2 whitespace-nowrap rounded-full px-[18px] py-[9px] text-xs font-bold uppercase tracking-[0.16em]"
-                        style={{ background: '#000000', color: accent, boxShadow: '0 0 0 4px #000000' }}
-                      >
-                        {p.badgeLabel}
+                  {hasBadge && (
+                    <span
+                      className="absolute left-1/2 top-[-10px] -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] xs:top-[-14px] xs:px-3 xs:py-1.5 xs:text-[10px] sm:top-[-16px] sm:px-[18px] sm:py-[9px] sm:text-xs sm:tracking-[0.16em]"
+                      style={{ background: '#000000', color: accent, boxShadow: '0 0 0 3px #000000' }}
+                    >
+                      {p.badgeLabel}
+                    </span>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <span className="kicker text-[9px] xs:text-[10px] sm:text-xs" style={{ color: mutedColor }}>
+                      {meta.kicker}
+                    </span>
+                    <Barcode bars={meta.bars} color="#000000" />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 sm:gap-3">
+                    <h3 className="font-display text-[20px] font-extrabold uppercase leading-[0.95] xs:text-[26px] sm:text-[50px]">
+                      {p.nombre}
+                    </h3>
+                    <p className="text-[11px] leading-snug xs:text-xs sm:min-h-[48px] sm:text-base" style={{ color: mutedColor }}>
+                      {p.descripcion}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-1 sm:gap-2">
+                    <div className="flex items-end gap-1 sm:gap-2.5">
+                      <span className="font-display text-[26px] font-black leading-[0.9] xs:text-[34px] sm:text-[80px]">
+                        ${fmt(p.precio)}
                       </span>
-                    )}
-
-                    <div className="flex items-center justify-between">
-                      <span className="kicker" style={{ color: mutedColor }}>
-                        {meta.kicker}
-                      </span>
-                      <Barcode bars={meta.bars} color="#000000" />
-                    </div>
-
-                    <div className="flex flex-col gap-2.5 sm:gap-3">
-                      <h3 className="font-display text-[34px] font-extrabold uppercase leading-[0.95] xs:text-[40px] sm:text-[50px]">
-                        {p.nombre}
-                      </h3>
-                      <p className="min-h-[42px] text-sm leading-snug sm:min-h-[48px] sm:text-base" style={{ color: mutedColor }}>
-                        {p.descripcion}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-end gap-2 sm:gap-2.5">
-                        <span className="font-display text-[46px] font-black leading-[0.9] xs:text-[56px] sm:text-[80px]">
-                          ${fmt(p.precio)}
-                        </span>
-                        <span className="kicker pb-1.5 sm:pb-2" style={{ color: mutedColor }}>
-                          {p.moneda}
-                        </span>
-                      </div>
-                      <span className="kicker" style={{ color: mutedColor }}>
-                        {meta.caption}
+                      <span className="kicker pb-0.5 text-[9px] xs:text-[10px] sm:pb-2 sm:text-xs" style={{ color: mutedColor }}>
+                        {p.moneda}
                       </span>
                     </div>
+                    <span className="kicker text-[9px] xs:text-[10px] sm:text-xs" style={{ color: mutedColor }}>
+                      {meta.caption}
+                    </span>
+                  </div>
 
-                    <div className="flex flex-col gap-5 sm:gap-6">
-                      <div className="h-px" style={{ background: dividerColor }} />
-                      <ul className="flex flex-col gap-3 text-sm font-medium leading-snug sm:gap-4 sm:text-base">
-                        {p.beneficios.map((b, bi) => {
-                          const special = bi === 0 && b.startsWith('Todo lo del')
-                          return (
-                            <li key={b} className={`flex items-center gap-3 ${special ? 'font-bold' : ''}`}>
-                              {special ? <PlanPlusMarker bg="#000000" stroke={accent} /> : <PlanCheck color="#000000" />}
-                              <span>{b}</span>
-                            </li>
-                          )
-                        })}
-                        {/* Ítems "no incluidos" — tachados y en gris para que quede claro qué queda afuera. */}
-                        {(p.noIncluye || []).map((b) => (
-                          <li key={`no-${b}`} className="flex items-center gap-3 text-black/40 line-through">
-                            <PlanCross color="currentColor" />
+                  <div className="flex flex-col gap-3 sm:gap-6">
+                    <div className="h-px" style={{ background: dividerColor }} />
+                    <ul className="flex flex-col gap-1.5 text-[11px] font-medium leading-snug xs:gap-2 xs:text-xs sm:gap-4 sm:text-base">
+                      {p.beneficios.map((b, bi) => {
+                        const special = bi === 0 && b.startsWith('Todo lo del')
+                        return (
+                          <li key={b} className={`flex items-start gap-1.5 xs:items-center xs:gap-2 sm:gap-3 ${special ? 'font-bold' : ''}`}>
+                            {special ? <PlanPlusMarker bg="#000000" stroke={accent} /> : <PlanCheck color="#000000" />}
                             <span>{b}</span>
                           </li>
-                        ))}
-                      </ul>
-                      {p.highlight && (
-                        <div
-                          className="rounded-xl px-4 py-3 text-sm leading-snug"
-                          style={{ background: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.78)' }}
-                        >
-                          {p.highlight}
-                        </div>
-                      )}
-                    </div>
+                        )
+                      })}
+                      {(p.noIncluye || []).map((b) => (
+                        <li key={`no-${b}`} className="flex items-start gap-1.5 text-black/40 line-through xs:items-center xs:gap-2 sm:gap-3">
+                          <PlanCross color="currentColor" />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {p.highlight && (
+                      <div
+                        className="rounded-lg px-2.5 py-2 text-[11px] leading-snug xs:px-3 xs:text-xs sm:rounded-xl sm:px-4 sm:py-3 sm:text-sm"
+                        style={{ background: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.78)' }}
+                      >
+                        {p.highlight}
+                      </div>
+                    )}
+                  </div>
 
-                    <Link
-                      to="/pedido"
-                      className="mt-auto flex h-[52px] items-center justify-center gap-2.5 rounded-[12px] text-[15px] font-bold transition-transform hover:-translate-y-0.5 sm:h-[60px] sm:gap-3 sm:rounded-[14px] sm:text-[17px]"
-                      style={{ background: '#000000', color: accent }}
-                    >
-                      Elegir {p.nombre}
-                      <ArrowRight size={18} className="sm:hidden" />
-                      <ArrowRight size={20} className="hidden sm:block" />
+                  <Link
+                    to="/pedido"
+                    className="mt-auto flex h-10 items-center justify-center gap-1.5 rounded-[10px] text-[12px] font-bold transition-transform hover:-translate-y-0.5 xs:h-11 xs:gap-2 xs:rounded-[12px] xs:text-[13px] sm:h-[60px] sm:gap-3 sm:rounded-[14px] sm:text-[17px]"
+                    style={{ background: '#000000', color: accent }}
+                  >
+                    Elegir {p.nombre}
+                    <ArrowRight size={14} className="xs:hidden" />
+                    <ArrowRight size={16} className="hidden xs:block sm:hidden" />
+                    <ArrowRight size={20} className="hidden sm:block" />
                   </Link>
                 </article>
               )
