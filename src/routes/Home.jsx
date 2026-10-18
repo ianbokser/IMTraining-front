@@ -1000,8 +1000,8 @@ export default function Home() {
               return (
                 <article
                   key={p.id}
-                  className={`relative flex h-full flex-col gap-3.5 rounded-[18px] p-3.5 text-black xs:gap-4 xs:rounded-[22px] xs:p-5 sm:gap-7 sm:rounded-[28px] sm:p-9 sm:pb-8 ${
-                    hasBadge ? 'pt-10 xs:pt-12 sm:pt-[72px]' : ''
+                  className={`relative flex h-full flex-col gap-2.5 rounded-[18px] p-3 text-black xs:gap-4 xs:rounded-[22px] xs:p-5 sm:gap-7 sm:rounded-[28px] sm:p-9 sm:pb-8 ${
+                    hasBadge ? 'pt-7 xs:pt-12 sm:pt-[72px]' : ''
                   }`}
                     style={{
                       background: accent,
@@ -1012,46 +1012,46 @@ export default function Home() {
                   >
                   {hasBadge && (
                     <span
-                      className="absolute left-1/2 top-[-10px] -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.14em] xs:top-[-14px] xs:px-3 xs:py-1.5 xs:text-[10px] sm:top-[-16px] sm:px-[18px] sm:py-[9px] sm:text-xs sm:tracking-[0.16em]"
-                      style={{ background: '#000000', color: accent, boxShadow: '0 0 0 3px #000000' }}
+                      className="absolute left-1/2 top-[-8px] -translate-x-1/2 whitespace-nowrap rounded-full px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.12em] xs:top-[-14px] xs:px-3 xs:py-1.5 xs:text-[10px] sm:top-[-16px] sm:px-[18px] sm:py-[9px] sm:text-xs sm:tracking-[0.16em]"
+                      style={{ background: '#000000', color: accent, boxShadow: '0 0 0 2px #000000' }}
                     >
                       {p.badgeLabel}
                     </span>
                   )}
 
-                  <div className="flex items-center justify-between">
+                  <div className="hidden items-center justify-between gap-2 xs:flex">
                     <span className="kicker text-[9px] xs:text-[10px] sm:text-xs" style={{ color: mutedColor }}>
                       {meta.kicker}
                     </span>
                     <Barcode bars={meta.bars} color="#000000" />
                   </div>
 
-                  <div className="flex flex-col gap-1.5 sm:gap-3">
-                    <h3 className="font-display text-[20px] font-extrabold uppercase leading-[0.95] xs:text-[26px] sm:text-[50px]">
+                  <div className="flex flex-col gap-1 sm:gap-3">
+                    <h3 className="font-display text-[16px] font-extrabold uppercase leading-[0.95] xs:text-[26px] sm:text-[50px]">
                       {p.nombre}
                     </h3>
-                    <p className="text-[11px] leading-snug xs:text-xs sm:min-h-[48px] sm:text-base" style={{ color: mutedColor }}>
+                    <p className="hidden text-[11px] leading-snug xs:block xs:text-xs sm:min-h-[48px] sm:text-base" style={{ color: mutedColor }}>
                       {p.descripcion}
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-1 sm:gap-2">
+                  <div className="flex flex-col gap-0.5 sm:gap-2">
                     <div className="flex items-end gap-1 sm:gap-2.5">
-                      <span className="font-display text-[26px] font-black leading-[0.9] xs:text-[34px] sm:text-[80px]">
+                      <span className="font-display text-[20px] font-black leading-[0.9] xs:text-[34px] sm:text-[80px]">
                         ${fmt(p.precio)}
                       </span>
                       <span className="kicker pb-0.5 text-[9px] xs:text-[10px] sm:pb-2 sm:text-xs" style={{ color: mutedColor }}>
                         {p.moneda}
                       </span>
                     </div>
-                    <span className="kicker text-[9px] xs:text-[10px] sm:text-xs" style={{ color: mutedColor }}>
+                    <span className="hidden kicker text-[8px] leading-tight xs:inline xs:text-[10px] sm:text-xs" style={{ color: mutedColor }}>
                       {meta.caption}
                     </span>
                   </div>
 
-                  <div className="flex flex-col gap-3 sm:gap-6">
+                  <div className="flex flex-col gap-1.5 sm:gap-6">
                     <div className="h-px" style={{ background: dividerColor }} />
-                    <ul className="flex flex-col gap-1.5 text-[11px] font-medium leading-snug xs:gap-2 xs:text-xs sm:gap-4 sm:text-base">
+                    <ul className="flex flex-col gap-1 text-[10.5px] font-medium leading-tight xs:gap-2 xs:text-xs xs:leading-snug sm:gap-4 sm:text-base">
                       {p.beneficios.map((b, bi) => {
                         const special = bi === 0 && b.startsWith('Todo lo del')
                         return (
@@ -1070,7 +1070,7 @@ export default function Home() {
                     </ul>
                     {p.highlight && (
                       <div
-                        className="rounded-lg px-2.5 py-2 text-[11px] leading-snug xs:px-3 xs:text-xs sm:rounded-xl sm:px-4 sm:py-3 sm:text-sm"
+                        className="hidden rounded-lg px-2.5 py-2 text-[11px] leading-snug xs:block xs:px-3 xs:text-xs sm:rounded-xl sm:px-4 sm:py-3 sm:text-sm"
                         style={{ background: 'rgba(0,0,0,0.12)', color: 'rgba(0,0,0,0.78)' }}
                       >
                         {p.highlight}
@@ -1080,10 +1080,11 @@ export default function Home() {
 
                   <Link
                     to="/pedido"
-                    className="mt-auto flex h-10 items-center justify-center gap-1.5 rounded-[10px] text-[12px] font-bold transition-transform hover:-translate-y-0.5 xs:h-11 xs:gap-2 xs:rounded-[12px] xs:text-[13px] sm:h-[60px] sm:gap-3 sm:rounded-[14px] sm:text-[17px]"
+                    className="mt-auto flex h-9 items-center justify-center gap-1 whitespace-nowrap rounded-[10px] text-center text-[12px] font-bold transition-transform hover:-translate-y-0.5 xs:h-11 xs:gap-2 xs:rounded-[12px] xs:text-[13px] sm:h-[60px] sm:gap-3 sm:rounded-[14px] sm:text-[17px]"
                     style={{ background: '#000000', color: accent }}
                   >
-                    Elegir {p.nombre}
+                    <span className="xs:hidden">Elegir</span>
+                    <span className="hidden xs:inline">Elegir {p.nombre}</span>
                     <ArrowRight size={14} className="xs:hidden" />
                     <ArrowRight size={16} className="hidden xs:block sm:hidden" />
                     <ArrowRight size={20} className="hidden sm:block" />
