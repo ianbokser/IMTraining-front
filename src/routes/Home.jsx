@@ -12,6 +12,7 @@ import {
   UserRound,
   MessageCircle,
   Mail,
+  FileText,
 } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -764,100 +765,81 @@ export default function Home() {
             </h2>
           </div>
         </Reveal>
-        <div className="mt-10 grid grid-cols-1 gap-4 sm:mt-16 sm:gap-6 md:grid-cols-12">
-          <Reveal className="md:col-span-7">
-            <article className="relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-6 text-paper sm:gap-5 sm:p-9">
-              <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
-                <span className="text-volt">Videos</span> en cada ejercicio
-              </h3>
-              <p className="max-w-md text-sm leading-relaxed text-paper/60 sm:text-base">
-                Mirás cómo se hace antes de hacerlo. Técnica y explicación, ejercicio por ejercicio.
-              </p>
-              <div className="relative mt-1 flex min-h-[180px] flex-grow items-center justify-center overflow-hidden rounded-xl border border-line bg-ink sm:mt-2 sm:min-h-[230px]">
-                <Dumbbell size={60} className="text-white/15 sm:hidden" strokeWidth={1.5} />
-                <Dumbbell size={80} className="hidden text-white/15 sm:block" strokeWidth={1.5} />
-                <div className="absolute inset-x-4 bottom-3 flex items-center gap-2.5 sm:inset-x-5 sm:bottom-4 sm:gap-3.5">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-volt sm:h-9 sm:w-9">
-                    <Play size={13} className="translate-x-px fill-ink text-ink sm:hidden" />
-                    <Play size={14} className="hidden translate-x-px fill-ink text-ink sm:block" />
-                  </span>
-                  <span className="relative h-1 flex-grow rounded-full bg-paper/15">
-                    <span className="absolute inset-y-0 left-0 w-[38%] rounded-full bg-volt" />
-                  </span>
-                  <span className="kicker text-[0.65rem] text-paper/60 sm:text-[0.72rem]">Sentadilla</span>
+        <div className="mx-auto mt-10 flex max-w-5xl flex-col items-center gap-4 sm:mt-16 sm:gap-6 md:flex-row md:items-stretch">
+          <Reveal className="w-full max-w-[380px] md:shrink-0 md:self-stretch">
+            <article className="group relative flex aspect-[9/16] h-full w-full flex-col justify-end overflow-hidden rounded-3xl border border-line bg-ink text-paper md:aspect-auto">
+              <div className="absolute inset-0">
+                <AutoPlayVideo src="/Videos%20en%20cada%20ejercicio.mp4" />
+              </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/70 via-40% to-ink/10" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink/60 via-transparent to-transparent" />
+              <div className="relative z-10 flex flex-col gap-3 p-6 sm:gap-4 sm:p-8">
+                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-volt/40 bg-ink/60 px-3 py-1 backdrop-blur-sm">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-volt" />
+                  <span className="kicker text-[0.6rem] text-volt sm:text-[0.68rem]">En vivo en tu PDF</span>
+                </span>
+                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+                  <span className="text-volt">Videos</span> en cada ejercicio
+                </h3>
+                <p className="max-w-md text-sm leading-relaxed text-paper/80">
+                  Mirás cómo se hace antes de hacerlo. Técnica y explicación, ejercicio por ejercicio.
+                </p>
+              </div>
+            </article>
+          </Reveal>
+
+          <div className="flex w-full max-w-[450px] flex-col gap-4 sm:gap-6 md:max-w-none md:flex-1">
+            <Reveal delay={80} className="md:min-h-0 md:flex-1">
+              <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
+                  <FileText size={26} strokeWidth={1.75} className="sm:hidden" />
+                  <FileText size={34} strokeWidth={1.75} className="hidden sm:block" />
+                </span>
+                <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                  <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+                    <span className="text-volt">PDF</span> listo para descargar
+                  </h3>
+                  <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
+                    Te llega en 24 h. Llevalo en el celular o imprimilo.
+                  </p>
                 </div>
-              </div>
-            </article>
-          </Reveal>
+              </article>
+            </Reveal>
 
-          <Reveal delay={80} className="md:col-span-5">
-            <article className="relative flex h-full flex-col gap-5 overflow-hidden rounded-3xl border border-line bg-olive p-6 text-paper sm:gap-7 sm:p-9">
-              <div aria-hidden="true" className="relative h-[200px] sm:h-[262px]">
-                <div className="absolute left-1/2 top-1.5 h-[190px] w-[150px] -translate-x-1/2 sm:h-[250px] sm:w-[190px]">
-                  <div className="absolute inset-0 -rotate-[9deg] rounded-xl bg-[#c4beb0]" />
-                  <div className="absolute inset-0 -rotate-[4deg] rounded-xl bg-[#dad4c8]" />
-                  <div className="absolute inset-0 flex rotate-[1deg] flex-col gap-3 rounded-xl bg-paper p-5">
-                    <div className="flex items-center justify-between">
-                      <span className="kicker text-ink-soft/70">PDF</span>
-                      <span className="grid h-[22px] w-[22px] place-items-center rounded-full bg-ink">
-                        <Play size={9} className="translate-x-px fill-volt text-volt" />
-                      </span>
-                    </div>
-                    <div className="h-[9px] w-[82%] rounded-md bg-ink" />
-                    <div className="h-[7px] w-full rounded bg-[#c4beb0]" />
-                    <div className="h-[7px] w-[90%] rounded bg-[#c4beb0]" />
-                    <div className="h-[7px] w-[96%] rounded bg-[#c4beb0]" />
-                    <div className="h-[7px] w-[70%] rounded bg-[#c4beb0]" />
-                    <div className="h-[7px] w-[88%] rounded bg-[#c4beb0]" />
-                  </div>
+            <Reveal delay={160} className="md:min-h-0 md:flex-1">
+              <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
+                  <ShieldCheck size={26} strokeWidth={1.75} className="sm:hidden" />
+                  <ShieldCheck size={34} strokeWidth={1.75} className="hidden sm:block" />
+                </span>
+                <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                  <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+                    Adaptada a <span className="text-volt">lesiones</span>
+                  </h3>
+                  <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
+                    Contanos si tenés alguna lesión o molestia y tu rutina se arma teniéndola en cuenta.
+                  </p>
                 </div>
-              </div>
-              <div className="flex flex-col gap-3 sm:gap-3.5">
-                <h3 className="font-display text-3xl font-extrabold uppercase leading-[0.95] sm:text-5xl">
-                  <span className="text-volt">PDF</span> listo
-                  <br />
-                  para descargar
-                </h3>
-                <p className="max-w-sm text-sm leading-relaxed text-paper/60 sm:text-base">
-                  Te llega en 24 h. Llevalo en el celular o imprimilo.
-                </p>
-              </div>
-            </article>
-          </Reveal>
+              </article>
+            </Reveal>
 
-          <Reveal delay={160} className="md:col-span-6">
-            <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
-                <Dumbbell size={26} strokeWidth={1.75} className="sm:hidden" />
-                <ShieldCheck size={34} strokeWidth={1.75} className="hidden sm:block" />
-              </span>
-              <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
-                <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
-                  Adaptada a <span className="text-volt">lesiones</span>
-                </h3>
-                <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
-                  Contanos si tenés alguna lesión o molestia y tu rutina se arma teniéndola en cuenta.
-                </p>
-              </div>
-            </article>
-          </Reveal>
-
-          <Reveal delay={240} className="md:col-span-6">
-            <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
-              <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
-                <Dumbbell size={26} strokeWidth={1.75} className="sm:hidden" />
-                <Dumbbell size={34} strokeWidth={1.75} className="hidden sm:block" />
-              </span>
-              <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
-                <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
-                  Sin <span className="text-volt">plantillas</span> genéricas
-                </h3>
-                <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
-                  Tu plan se arma a partir de tus objetivos, tu cuerpo y tu tiempo.
-                </p>
-              </div>
-            </article>
-          </Reveal>
+            <Reveal delay={240} className="md:min-h-0 md:flex-1">
+              <article className="flex h-full items-center gap-4 overflow-hidden rounded-3xl border border-line bg-olive p-5 text-paper sm:gap-7 sm:p-9">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-volt/15 text-volt sm:h-[72px] sm:w-[72px]">
+                  <Dumbbell size={26} strokeWidth={1.75} className="sm:hidden" />
+                  <Dumbbell size={34} strokeWidth={1.75} className="hidden sm:block" />
+                </span>
+                <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                  <h3 className="font-display text-xl font-extrabold uppercase leading-[0.95] sm:text-4xl">
+                    Sin <span className="text-volt">plantillas</span> genéricas
+                  </h3>
+                  <p className="max-w-md text-[0.82rem] leading-relaxed text-paper/60 sm:text-[0.95rem]">
+                    Tu plan se arma a partir de tus objetivos, tu cuerpo y tu tiempo.
+                  </p>
+                </div>
+              </article>
+            </Reveal>
+          </div>
         </div>
       </section>
 
